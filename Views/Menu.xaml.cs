@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace TcADSNet_Demo.Views
 {
     /// <summary>
-    /// Interaction logic for Second.xaml
+    /// Interaction logic for Menu.xaml
     /// </summary>
-    public partial class Second : Window
+    public partial class Menu : Window
     {
-        public Second()
+        public Menu()
         {
             InitializeComponent();
         }
