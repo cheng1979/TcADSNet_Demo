@@ -8,17 +8,17 @@ using Prism.Mvvm;
 
 namespace TcADSNet_Demo.ViewModels
 {
-    public class MainWindowViewModel : BindableBase
+    public class MoveDemoViewModel : BindableBase
     {
         /// <summary>/// Prism Property/// </summary>
 		/// <summary>/// Prism Property/// </summary>
-		private static MainWindowViewModel _instance;
-        public static MainWindowViewModel Instance
+		private static MoveDemoViewModel _instance;
+        public static MoveDemoViewModel Instance
         {
             get { 
                 if(_instance == null)
                 {
-                    _instance = new MainWindowViewModel();
+                    _instance = new MoveDemoViewModel();
                 }
                 return _instance; 
             }
@@ -71,7 +71,7 @@ namespace TcADSNet_Demo.ViewModels
         private int originY = 250;
         private int originX = 50;
 
-        public MainWindowViewModel()
+        public MoveDemoViewModel()
         {
             MovePosition = "50,250,0,0";
         }
@@ -96,11 +96,11 @@ namespace TcADSNet_Demo.ViewModels
         {
             float step = 0f;
             int dist = 0;
-            int xCoord = MainWindowViewModel.Instance.originX;
-            int yCoord = MainWindowViewModel.Instance.originY;
+            int xCoord = MoveDemoViewModel.Instance.originX;
+            int yCoord = MoveDemoViewModel.Instance.originY;
             bool direction = true;
-            Console.WriteLine("Thread Start : {0}", MainWindowViewModel.Start);
-            while (MainWindowViewModel.Start)
+            Console.WriteLine("Thread Start : {0}", MoveDemoViewModel.Start);
+            while (MoveDemoViewModel.Start)
             {
                 Console.WriteLine("Thread Running - X : {0}",xCoord);
                 if (xCoord >= 500) direction = true;
@@ -132,10 +132,10 @@ namespace TcADSNet_Demo.ViewModels
                     yCoord -= dist / 2;
                 }
                 
-                MainWindowViewModel.Instance.MovePosition = xCoord.ToString() + "," + yCoord.ToString() + ",0,0";
-                Console.WriteLine("{0} : {1}", MainWindowViewModel.Instance.MovePosition, dist);
+                MoveDemoViewModel.Instance.MovePosition = xCoord.ToString() + "," + yCoord.ToString() + ",0,0";
+                Console.WriteLine("{0} : {1}", MoveDemoViewModel.Instance.MovePosition, dist);
                 //Thread.Sleep(500);
-                Thread.Sleep((int)MainWindowViewModel.Instance.Velocity);
+                Thread.Sleep((int)MoveDemoViewModel.Instance.Velocity);
             }
         }
 

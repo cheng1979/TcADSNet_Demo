@@ -9,6 +9,27 @@
         mc:Ignorable="d"
         Title="Menu" Height="675" Width="1200">
     <Window.Resources>
+        <!--TopMenu Button-->
+        <Style x:Key="TopMenuButton" TargetType="Button">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="10"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="0,1,1,0">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              TextElement.FontWeight="Normal"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!--Option Button-->
         <Style x:Key="OptionButton" TargetType="Button">
             <Setter Property="Height" Value="50"/>
@@ -71,42 +92,19 @@
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
         <!--Top menu bar-->
-        <StackPanel Grid.Column="1" Grid.Row="1"
-                    Orientation="Horizontal">
-            <Button x:Name="BtnOptionA" Content="Option A" Style="{StaticResource OptionButton}"/>
-            <Button x:Name="BtnOptionB" Content="Option B" Style="{StaticResource OptionButton}" />
-        </StackPanel>
+        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7"
+              Background="#3e657d">
+            <StackPanel Orientation="Horizontal"
+                        Margin="10,0,0,10">
+                <Button x:Name="BtnMenuItems" Content="Items" Style="{StaticResource TopMenuButton}"
+                        Click="BtnMenuItems_Click"/>
+                <Button x:Name="BtnMoveDemo" Content="Move Demo" Style="{StaticResource TopMenuButton}"
+                        Click="BtnMoveDemo_Click" />
+            </StackPanel>
+        </Grid>
         <!--Body Content-->
         <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="5">
-            <!--Body Content Grid Definitions-->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <!--Body Content - Cell (0,1)-->
-            <Grid Grid.Column="0" Grid.Row="1">
-                <Button x:Name="BtnItemIOView" Content="IO View"
-                        Style="{StaticResource ItemButton}"/>
-            </Grid>
-            <!--Body Content - Cell (0,2)-->
-            <Grid Grid.Column="0" Grid.Row="2">
-                <Button x:Name="BtnItemSetup" Content="Setup"
-                        Style="{StaticResource ItemButton}"/>
-            </Grid>
-            <!--Body Content - Cell (1,1)-->
-            <Grid Grid.Column="1" Grid.Row="1">
-                <Button x:Name="BtnItemCrane" Content="Crane"
-                        Style="{StaticResource ItemButton}"/>
-            </Grid>
+            <ContentControl prism:RegionManager.RegionName="BodyContent"/>
         </Grid>
     </Grid>
 </Window>

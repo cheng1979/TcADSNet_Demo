@@ -20,11 +20,11 @@ namespace TcADSNet_Demo.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MoveDemo : UserControl
     {
         private bool cmdStart = false;
 
-        public MainWindow()
+        public MoveDemo()
         {
             InitializeComponent();
             //objPos = new MainWindowViewModel();
@@ -32,7 +32,7 @@ namespace TcADSNet_Demo.Views
 
         public void Moving(int step)
         {
-            MainWindowViewModel.Instance.SetPositionByNStep(step);
+            MoveDemoViewModel.Instance.SetPositionByNStep(step);
         }
 
        
@@ -43,7 +43,7 @@ namespace TcADSNet_Demo.Views
             if (!text.Equals("") && text != null)
             {
                 //Moving(int.Parse(text));
-                MainWindowViewModel.Instance.Velocity = int.Parse(text);
+                MoveDemoViewModel.Instance.Velocity = int.Parse(text);
             }
         }
 
@@ -53,14 +53,14 @@ namespace TcADSNet_Demo.Views
             if (!cmdStart)
             {
                 cmdStart = true;
-                MainWindowViewModel.Start = true;
-                thOscilation = new Thread(new ThreadStart(MainWindowViewModel.Oscilation));
+                MoveDemoViewModel.Start = true;
+                thOscilation = new Thread(new ThreadStart(MoveDemoViewModel.Oscilation));
                 thOscilation.Start();
             }
             else
             {
                 cmdStart = false;
-                MainWindowViewModel.Start = false;
+                MoveDemoViewModel.Start = false;
             }
 
         }
