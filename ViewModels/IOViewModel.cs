@@ -11,6 +11,7 @@ namespace TcADSNet_Demo.ViewModels
 {
     public class IOViewModel : BindableBase
     {
+        #region Variables
         private int _plcIsAlivePulse;
         public int PlcIsAlivePulse
         {
@@ -34,7 +35,7 @@ namespace TcADSNet_Demo.ViewModels
             }
             set { _conn = value; }
         }
-
+        #endregion
 
         public IOViewModel()
         {

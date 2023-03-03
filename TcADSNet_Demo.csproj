@@ -111,15 +111,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TwinCAT.Ads, Version=2.2.56.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="TwinCAT.Ads, Version=4.2.169.0, Culture=neutral, PublicKeyToken=180016cd49e5e8c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Beckhoff.TwinCAT.Ads.6.0.235\lib\net461\TwinCAT.Ads.dll</HintPath>
-    </Reference>
-    <Reference Include="TwinCAT.Ads.Abstractions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=180016cd49e5e8c3, processorArchitecture=MSIL">
-      <HintPath>packages\Beckhoff.TwinCAT.Ads.Abstractions.6.0.235\lib\net461\TwinCAT.Ads.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="TwinCAT.Ads.Server, Version=6.0.0.0, Culture=neutral, PublicKeyToken=180016cd49e5e8c3, processorArchitecture=MSIL">
-      <HintPath>packages\Beckhoff.TwinCAT.Ads.Server.6.0.235\lib\net461\TwinCAT.Ads.Server.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\TwinCAT\AdsApi\.NET\v4.0.30319\TwinCAT.Ads.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Abstractions, Version=5.11.7.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>packages\Unity.Abstractions.5.11.7\lib\net47\Unity.Abstractions.dll</HintPath>

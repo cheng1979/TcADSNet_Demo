@@ -34,7 +34,11 @@ namespace TcADSNet_Demo.Model
                 
                 Client = new TcAdsClient();
                 //Tc amsNet = new AmsNetId("5.59.242.176.1.1");
-                Client.Connect("5.59.242.176.1.1", 851);
+                AmsAddress amsAddr = new AmsAddress("41.224.193.92.1.1", 851);
+                //Client.Connect("5.59.242.176.1.1", 851); /// CP-WinCE
+                //Client.Connect("41.224.193.92.1.1", 851); /// PC-BSD
+                Client.Connect(amsAddr.NetId, amsAddr.Port);
+
                 Thread.Sleep(50);
                 if (Client.IsConnected)
                 {
@@ -49,6 +53,14 @@ namespace TcADSNet_Demo.Model
             catch (AdsErrorException ex)
             {
                 MessageBox.Show("AdsConnection Exception Error :\n " + ex.Message);
+                Client.Dispose();
+            }
+        }
+
+        public void Disconnect()
+        {
+            if (Client.IsConnected)
+            {
                 Client.Dispose();
             }
         }

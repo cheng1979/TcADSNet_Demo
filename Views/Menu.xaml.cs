@@ -32,12 +32,14 @@ namespace TcADSNet_Demo.Views
             _regionManager = regionManager;
 
             this.Loaded += Menu_Loaded;
+            this.Closing += Menu_Closing;
 
             ///// Initial region view
             //var view = MyRegions.MainRegion.GetView("MenuItems");
             //MyRegions.MainRegion.Activate(view);
         }
 
+        
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
             MyRegions.MainRegion = _regionManager.Regions["BodyContent"];
@@ -46,6 +48,12 @@ namespace TcADSNet_Demo.Views
             MyRegions.MainRegion.Add(_container.Resolve<MoveDemo>(),    "MoveDemo");
             MyRegions.MainRegion.Add(_container.Resolve<IO>(),          "IO");
         }
+
+        private void Menu_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            /// implement ADS connection dispose before closing the wpf form.
+        }
+
 
         private void BtnMenuItems_Click(object sender, RoutedEventArgs e)
         {
