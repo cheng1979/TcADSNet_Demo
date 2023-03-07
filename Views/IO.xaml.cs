@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TcADSNet_Demo.Model;
 
 namespace TcADSNet_Demo.Views
 {
@@ -20,9 +21,17 @@ namespace TcADSNet_Demo.Views
     /// </summary>
     public partial class IO : UserControl
     {
+        public static EventHandler evAdsDebugClicked;
+
         public IO()
         {
             InitializeComponent();
+        }
+
+        private void BtnDebug_Click(object sender, RoutedEventArgs e)
+        {
+            /// Request for read value
+            evAdsDebugClicked?.Invoke(this, EventArgs.Empty);
         }
     }
 }

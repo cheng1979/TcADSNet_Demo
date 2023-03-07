@@ -30,6 +30,33 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--TopMenu Button Border-->
+        <Style x:Key="TopMenuButtonBorder" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="MinWidth" Value="110"/>
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="10"
+                                Background="Transparent"
+                                BorderBrush="AliceBlue"
+                                BorderThickness="1,1,1,1">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              TextElement.FontWeight="Normal"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--TopMenu TextBlock-->
+        <Style x:Key="TopMenuTextBlock" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
         <!--Option Button-->
         <Style x:Key="OptionButton" TargetType="Button">
             <Setter Property="Height" Value="50"/>
@@ -100,6 +127,15 @@
                         Click="BtnMenuItems_Click"/>
                 <Button x:Name="BtnMoveDemo" Content="Move Demo" Style="{StaticResource TopMenuButton}"
                         Click="BtnMoveDemo_Click" />
+                <!--<TextBlock Text="AMS NetId" Style="{StaticResource TopMenuTextBlock}"/>-->
+                <Button x:Name="BtnTextNetId" Content="AMS NetId" Style="{StaticResource TopMenuButton}"/>
+                <TextBox x:Name="TxtBox_NetId" Width="250" Height="30"/>
+                <Button x:Name="BtnTextAMSPort" Content="AMS Port" Style="{StaticResource TopMenuButton}"/>
+                <TextBox x:Name="TxtBox_Port" Width="250" Height="30"/>
+                <Button x:Name="BtnAdsConnect" Content="ADS Connect" Style="{StaticResource TopMenuButtonBorder}" 
+                        Click="BtnAdsConnect_Click"/>
+                <Button x:Name="BtnAdsDesconnect" Content="Desconnect" Style="{StaticResource TopMenuButtonBorder}" 
+                        Click="BtnAdsDesconnect_Click"/>
             </StackPanel>
         </Grid>
         <!--Body Content-->

@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TcADSNet_Demo.Model;
 
 namespace TcADSNet_Demo.Views
 {
@@ -23,6 +24,7 @@ namespace TcADSNet_Demo.Views
     {
         private IContainerExtension _container;
         private IRegionManager _regionManager;
+        public static EventHandler evStartClientRead;
 
         public Menu(IContainerExtension container, IRegionManager regionManager)
         {
@@ -47,6 +49,10 @@ namespace TcADSNet_Demo.Views
             MyRegions.MainRegion.Add(_container.Resolve<MenuItems>(),   "MenuItems");
             MyRegions.MainRegion.Add(_container.Resolve<MoveDemo>(),    "MoveDemo");
             MyRegions.MainRegion.Add(_container.Resolve<IO>(),          "IO");
+
+            /// Pre fill TextBox Values
+            TxtBox_NetId.Text = "5.59.242.176.1.1";
+            TxtBox_Port.Text  = "851";
         }
 
         private void Menu_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -67,6 +73,22 @@ namespace TcADSNet_Demo.Views
             /// Change region view to MoveDemo
             var view = MyRegions.MainRegion.GetView("MoveDemo");
             MyRegions.MainRegion.Activate(view);
+        }
+
+        private void BtnAdsConnect_Click(object sender, RoutedEventArgs e)
+        {
+            AdsConn adsConn = AdsConn.Instance;
+            adsConn.NetId   = TxtBox_NetId.Text;
+            adsConn.AdsPort = TxtBox_Port.Text;
+            adsConn.Connect();
+            /// Rise event to read client variables
+            evStartClientRead?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void BtnAdsDesconnect_Click(object sender, RoutedEventArgs e)
+        {
+            if (AdsConn.Instance.IsConnected) AdsConn.Instance.Disconnect();
+
         }
     }
 }

@@ -27,10 +27,19 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource ItemText}"
-                   x:Name="Var1_Lable" Text="VAR1"/>
+                   Text="VARIABLE"/>
         <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource ItemText}"
+                   Text="Type"/>
+        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="0">
+            <TextBlock  Style="{StaticResource ItemText}"
+                   Text="Value"/>
+            <Button x:Name="BtnDebug" Content="Debug" Click="BtnDebug_Click"/>
+        </StackPanel>
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource ItemText}"
+                   x:Name="Var1_Lable" Text="VAR1"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource ItemText}"
                    x:Name="Var1_Type" Text="Type"/>
-        <TextBlock Grid.Column="2" Grid.Row="0" Style="{StaticResource ItemText}"
-                   x:Name="Var1_Value" Text="Value"/>
+        <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource ItemText}"
+                   x:Name="Var1_Value" Text="{Binding PlcIsAlivePulse}"/>
     </Grid>
 </UserControl>
