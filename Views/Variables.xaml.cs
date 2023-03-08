@@ -19,11 +19,11 @@ namespace TcADSNet_Demo.Views
     /// <summary>
     /// Interaction logic for IO.xaml
     /// </summary>
-    public partial class IO : UserControl
+    public partial class Variables : UserControl
     {
         public static EventHandler evAdsDebugClicked;
 
-        public IO()
+        public Variables()
         {
             InitializeComponent();
         }

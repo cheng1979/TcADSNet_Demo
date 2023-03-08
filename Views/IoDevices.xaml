@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="TcADSNet_Demo.Views.IoDevices"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TcADSNet_Demo.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DesignHeight="555" d:DesignWidth="1180">
+    <UserControl.Resources>
+        <Style x:Key="ButtonRegions" TargetType="Button">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="0"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="0,1,1,0">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              TextElement.FontWeight="Normal"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="500"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button x:Name="BtnViewVariablesTree" Style="{StaticResource ButtonRegions}"
+                    Content="Variables Tree"/>
+            <Button x:Name="BtnViewVariables" Style="{StaticResource ButtonRegions}"
+                    Content="Variables"/>
+        </StackPanel>
+        <ContentControl Grid.Row="1"
+            prism:RegionManager.RegionName="IoDevicesContent"/>
+    </Grid>
+</UserControl>

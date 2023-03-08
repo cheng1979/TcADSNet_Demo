@@ -131,16 +131,29 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\AdsConn.cs" />
+    <Compile Include="Model\PlcMemberDTO.cs" />
+    <Compile Include="Model\PlcSymbolsDTO.cs" />
     <Compile Include="MyRegions.cs" />
-    <Compile Include="ViewModels\IOViewModel.cs" />
+    <Compile Include="RegionsName.cs" />
+    <Compile Include="ViewModels\VariablesViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
-    <Compile Include="Views\IO.xaml.cs">
-      <DependentUpon>IO.xaml</DependentUpon>
+    <Compile Include="Views\IoDevices.xaml.cs">
+      <DependentUpon>IoDevices.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Variables.xaml.cs">
+      <DependentUpon>Variables.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\IO.xaml">
+    <Compile Include="Views\VariablesTree.xaml.cs">
+      <DependentUpon>VariablesTree.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\IoDevices.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Variables.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,6 +178,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VariablesTree.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

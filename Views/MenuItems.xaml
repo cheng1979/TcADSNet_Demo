@@ -51,8 +51,8 @@
         </Grid.RowDefinitions>
         <!--Body Content - Cell (0,1)-->
         <Grid Grid.Column="0" Grid.Row="1">
-            <Button x:Name="BtnItemIOView" Content="IO View"
-                        Style="{StaticResource ItemButton}" Click="BtnItemIOView_Click"/>
+            <Button x:Name="BtnItemIODevices" Content="IO Devices"
+                        Style="{StaticResource ItemButton}" Click="BtnItemIODevices_Click"/>
         </Grid>
         <!--Body Content - Cell (0,2)-->
         <Grid Grid.Column="0" Grid.Row="2">
@@ -61,8 +61,8 @@
         </Grid>
         <!--Body Content - Cell (1,1)-->
         <Grid Grid.Column="1" Grid.Row="1">
-            <Button x:Name="BtnItemCrane" Content="Crane"
-                        Style="{StaticResource ItemButton}"/>
+            <Button x:Name="BtnItemVariablesView" Content="Variables View"
+                        Style="{StaticResource ItemButton}" Click="BtnItemVariablesView_Click"/>
         </Grid>
     </Grid>
 </UserControl>

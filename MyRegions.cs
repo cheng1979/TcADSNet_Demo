@@ -13,5 +13,7 @@ namespace TcADSNet_Demo
     public static class MyRegions 
     {
         public static IRegion MainRegion;
+        public static IRegion IoDevicesRegion;
+
     }
 }

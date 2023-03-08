@@ -25,10 +25,17 @@ namespace TcADSNet_Demo.Views
             InitializeComponent();
         }
 
-        private void BtnItemIOView_Click(object sender, RoutedEventArgs e)
+        private void BtnItemVariablesView_Click(object sender, RoutedEventArgs e)
         {
-            /// Activate IO View
-            var view = MyRegions.MainRegion.GetView("IO");
+            /// Activate Variables View
+            var view = MyRegions.MainRegion.GetView(RegionsName.Variables);
+            MyRegions.MainRegion.Activate(view);
+        }
+
+        private void BtnItemIODevices_Click(object sender, RoutedEventArgs e)
+        {
+            /// Activate IODevices View
+            var view = MyRegions.MainRegion.GetView(RegionsName.IoDevices);
             MyRegions.MainRegion.Activate(view);
         }
     }

@@ -12,7 +12,7 @@ using TcADSNet_Demo.Views;
 
 namespace TcADSNet_Demo.ViewModels
 {
-    public class IOViewModel : BindableBase
+    public class VariablesViewModel : BindableBase
     {
         #region Variables
         private UInt32 _plcIsAlivePulse;
@@ -32,9 +32,9 @@ namespace TcADSNet_Demo.ViewModels
         
         #endregion
 
-        public IOViewModel()
+        public VariablesViewModel()
         {
-            IO.evAdsDebugClicked += IO_evAdsDebugClicked;
+            Variables.evAdsDebugClicked += IO_evAdsDebugClicked;
             Menu.evStartClientRead      += Menu_evStartClientRead;
 
         }

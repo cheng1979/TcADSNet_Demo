@@ -22,8 +22,8 @@ namespace TcADSNet_Demo.Views
     /// </summary>
     public partial class Menu : Window
     {
-        private IContainerExtension _container;
-        private IRegionManager _regionManager;
+        public static IContainerExtension _container;
+        public static IRegionManager _regionManager;
         public static EventHandler evStartClientRead;
 
         public Menu(IContainerExtension container, IRegionManager regionManager)
@@ -44,11 +44,18 @@ namespace TcADSNet_Demo.Views
         
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
-            MyRegions.MainRegion = _regionManager.Regions["BodyContent"];
+            MyRegions.MainRegion = _regionManager.Regions[RegionsName.BodyContent];
             /// first region added will be the one shown on App loaded.
-            MyRegions.MainRegion.Add(_container.Resolve<MenuItems>(),   "MenuItems");
-            MyRegions.MainRegion.Add(_container.Resolve<MoveDemo>(),    "MoveDemo");
-            MyRegions.MainRegion.Add(_container.Resolve<IO>(),          "IO");
+            MyRegions.MainRegion.Add(_container.Resolve<MenuItems>(),   RegionsName.MenuItems);
+            MyRegions.MainRegion.Add(_container.Resolve<MoveDemo>(),    RegionsName.MoveDemo);
+            MyRegions.MainRegion.Add(_container.Resolve<Variables>(),    RegionsName.Variables);
+            MyRegions.MainRegion.Add(_container.Resolve<IoDevices>(),    RegionsName.IoDevices);
+
+
+            ///// load sub-content regions : IoDevicesRegion
+            ////_regionManager.Regions.Add(MyRegions.IoDevicesRegion);
+            //MyRegions.IoDevicesRegion = _regionManager.Regions[RegionsName.IoDevicesContent];
+            //MyRegions.IoDevicesRegion.Add(_container.Resolve<Variables>(), RegionsName.Variables);
 
             /// Pre fill TextBox Values
             TxtBox_NetId.Text = "5.59.242.176.1.1";
