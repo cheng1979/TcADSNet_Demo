@@ -15,6 +15,10 @@ namespace TcADSNet_Demo.Model
 {
     public class AdsConn
     {
+        public static EventHandler evAdsConnected;
+        public static EventHandler evAdsDisconnected;
+
+        #region Variables
         private TcAdsClient _client;
         public TcAdsClient Client
         {
@@ -52,7 +56,7 @@ namespace TcADSNet_Demo.Model
             }
             private set { _instance = value; }
         }
-
+        #endregion
 
 
         public AdsConn()
@@ -86,6 +90,9 @@ namespace TcADSNet_Demo.Model
                     {
                         _isConnected = false;
                     }
+                    ///Rise event when connection acquired
+                    evAdsConnected?.Invoke(this, EventArgs.Empty);
+
                     MessageBox.Show("ADS Connection Status = " + Client.IsConnected.ToString());
                 }
                 else
@@ -106,22 +113,29 @@ namespace TcADSNet_Demo.Model
             {
                 Client.Disconnect();
                 IsConnected = false;
+                ///Rise event
+                evAdsDisconnected?.Invoke(this, EventArgs.Empty);
+
                 MessageBox.Show("Client Disconnected.");
             }
         }
 
-        public void GetSymbol()
+        public ISymbolLoader GetSymbol()
         {
-            SymbolLoaderSettings symbSettings_flat = new SymbolLoaderSettings(TwinCAT.SymbolsLoadMode.Flat, ValueAccessMode.IndexGroupOffsetPreferred);
+            //SymbolLoaderSettings symbSettings_flat = new SymbolLoaderSettings(TwinCAT.SymbolsLoadMode.Flat, ValueAccessMode.IndexGroupOffsetPreferred);
             SymbolLoaderSettings symbSettings_tree = new SymbolLoaderSettings(TwinCAT.SymbolsLoadMode.VirtualTree, ValueAccessMode.IndexGroupOffsetPreferred);
 
             ISymbolLoader symbLoader = SymbolLoaderFactory.Create(Client, symbSettings_tree);
 
-            Console.WriteLine("Start Interate {0} Symbols:\n", symbLoader.Symbols.Count);
-            foreach (ISymbol item in symbLoader.Symbols)
-            {
-                Console.WriteLine(item.InstancePath);
-            }
+            #region For Debug
+            //Console.WriteLine("Start Interate {0} Symbols:\n", symbLoader.Symbols.Count);
+            //foreach (ISymbol item in symbLoader.Symbols)
+            //{
+            //    Console.WriteLine(item.InstancePath);
+            //}
+            #endregion
+
+            return symbLoader;
         }
 
     }///Class

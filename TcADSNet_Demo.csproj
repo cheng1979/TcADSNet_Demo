@@ -131,10 +131,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\AdsConn.cs" />
-    <Compile Include="Model\PlcMemberDTO.cs" />
-    <Compile Include="Model\PlcSymbolsDTO.cs" />
+    <Compile Include="Model\PlcMember.cs" />
+    <Compile Include="Model\PlcMembersCollection.cs" />
+    <Compile Include="Model\PlcSymbol.cs" />
     <Compile Include="MyRegions.cs" />
     <Compile Include="RegionsName.cs" />
+    <Compile Include="ViewModels\VariablesTreeViewModel.cs" />
     <Compile Include="ViewModels\VariablesViewModel.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="Views\IoDevices.xaml.cs">

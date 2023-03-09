@@ -8,6 +8,7 @@ using System.Windows;
 using Prism.Mvvm;
 using TcADSNet_Demo.Model;
 using TcADSNet_Demo.Views;
+using TwinCAT.TypeSystem;
 //using TwinCAT.Ads;
 
 namespace TcADSNet_Demo.ViewModels
@@ -105,7 +106,18 @@ namespace TcADSNet_Demo.ViewModels
 
         private void LoadPLCSymbolInfo()
         {
-            AdsConn.Instance.GetSymbol();
+            /// Debug purpose 
+            ISymbolLoader symbolsColl = AdsConn.Instance.GetSymbol(); /// get plc symbols
+            List<PlcMember> memberList = new List<PlcMember>();
+            ///Prepare memberList
+            foreach (IVirtualStructInstance item in symbolsColl.Symbols)
+            {
+                ///Get member name and symbols collection (MemberInstances)
+                memberList.Add(new PlcMember(item.InstanceName, item.MemberInstances));
+            }
+            ///Assign member collection
+            PlcMembersCollection membersCollection = new PlcMembersCollection(memberList);
+
         }
 
 

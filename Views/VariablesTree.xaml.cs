@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TcADSNet_Demo.Model;
 
 namespace TcADSNet_Demo.Views
 {
@@ -23,6 +24,23 @@ namespace TcADSNet_Demo.Views
         public VariablesTree()
         {
             InitializeComponent();
+            
         }
+
+        private void TreeViewVariables_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (e != null && e.NewValue!= null)
+            {
+                if (e.NewValue is PlcSymbol)
+                {
+                    Console.WriteLine("Selected Symbol : " + ((PlcSymbol)e.NewValue).InstancePath);
+                }
+                if (e.NewValue is PlcMember)
+                {
+                    Console.WriteLine("Selected Member : " + ((PlcMember)e.NewValue).Name);
+                }
+            }
+        }
+
     }
 }
