@@ -27,20 +27,7 @@ namespace TcADSNet_Demo.Views
             
         }
 
-        private void TreeViewVariables_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if (e != null && e.NewValue!= null)
-            {
-                if (e.NewValue is PlcSymbol)
-                {
-                    Console.WriteLine("Selected Symbol : " + ((PlcSymbol)e.NewValue).InstancePath);
-                }
-                if (e.NewValue is PlcMember)
-                {
-                    Console.WriteLine("Selected Member : " + ((PlcMember)e.NewValue).Name);
-                }
-            }
-        }
+        
 
     }
 }

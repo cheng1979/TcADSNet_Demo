@@ -16,6 +16,8 @@ namespace TcADSNet_Demo.ViewModels
     public class VariablesViewModel : BindableBase
     {
         #region Variables
+        private bool _endThreadReadAny { get; set; }
+
         private UInt32 _plcIsAlivePulse;
         public UInt32 PlcIsAlivePulse
         {
@@ -37,14 +39,25 @@ namespace TcADSNet_Demo.ViewModels
         {
             Variables.evAdsDebugClicked += IO_evAdsDebugClicked;
             Menu.evStartClientRead      += Menu_evStartClientRead;
+            AdsConn.evAdsIsDisconnecting += AdsConn_evAdsIsDisconnecting;
+
 
         }
 
+
         #region Events Listener
+        private void AdsConn_evAdsIsDisconnecting(object sender, EventArgs e)
+        {
+            ///ADS is about to disconnect
+            ///Sign out from Ads Connection usage control list and end the Thread
+            AdsConn.Instance.SignOutFromConnectionAssociation("Thread_ContinuousReadAny");
+            _endThreadReadAny = true;
+        }
+
         private void IO_evAdsDebugClicked(object sender, EventArgs e)
         {
             //ReadValueOnce();
-            LoadPLCSymbolInfo();
+            
         }
 
         private void Menu_evStartClientRead(object sender, EventArgs e)
@@ -85,7 +98,9 @@ namespace TcADSNet_Demo.ViewModels
         {
             try
             {
-                while (AdsConn.Instance.Client.IsConnected)
+                _endThreadReadAny = false;
+                AdsConn.Instance.SignInToConnectionAssociation("Thread_ContinuousReadAny"); ///Sign into Ads Connection usage control list
+                while (AdsConn.Instance.Client.IsConnected && !_endThreadReadAny)
                 {
                     Hvar = AdsConn.Instance.Client.CreateVariableHandle("ALIVE.nClockPulse");
                     PlcIsAlivePulse = (UInt32)AdsConn.Instance.Client.ReadAny(Hvar, typeof(UInt32));
@@ -97,6 +112,8 @@ namespace TcADSNet_Demo.ViewModels
             {
                 Console.WriteLine("ADS Error: " + ex.Message);
                 MessageBox.Show("ADS Read Error!\n" + ex.Message);
+                ///Sign out from Ads Connection usage control list
+                AdsConn.Instance.SignOutFromConnectionAssociation("Thread_ContinuousReadAny");
             }
             finally
             {
@@ -104,21 +121,7 @@ namespace TcADSNet_Demo.ViewModels
             }
         }
 
-        private void LoadPLCSymbolInfo()
-        {
-            /// Debug purpose 
-            ISymbolLoader symbolsColl = AdsConn.Instance.GetSymbol(); /// get plc symbols
-            List<PlcMember> memberList = new List<PlcMember>();
-            ///Prepare memberList
-            foreach (IVirtualStructInstance item in symbolsColl.Symbols)
-            {
-                ///Get member name and symbols collection (MemberInstances)
-                memberList.Add(new PlcMember(item.InstanceName, item.MemberInstances));
-            }
-            ///Assign member collection
-            PlcMembersCollection membersCollection = new PlcMembersCollection(memberList);
-
-        }
+        
 
 
     }/// Class

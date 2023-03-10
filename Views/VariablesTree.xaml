@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TcADSNet_Demo.Views"
              xmlns:model="clr-namespace:TcADSNet_Demo.Model"
+             xmlns:twincat="clr-namespace:TwinCAT.Ads.TypeSystem;assembly=TwinCAT.Ads"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
@@ -17,21 +18,16 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <TreeView Grid.Column="0" x:Name="TreeViewVariables"
-                  ItemsSource="{Binding MembersCollection.Collection}" 
-                  SelectedItemChanged="TreeViewVariables_SelectedItemChanged">
+        <TreeView Grid.Column="0" x:Name="TreeViewSecondVariables"
+                  ItemsSource="{Binding TwincatSymbols}">
             <TreeView.Resources>
-                <HierarchicalDataTemplate 
-                                  DataType="{x:Type model:PlcMember}"
-                                  ItemsSource="{Binding Members}">
-                    <TextBlock Text="{Binding Name}"/>
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate 
-                                  DataType="{x:Type model:PlcSymbol}"
-                                  >
-                    <TextBlock Text="{Binding Name}"/>
+                <HierarchicalDataTemplate
+                                  DataType="{x:Type twincat:Symbol}"
+                                  ItemsSource="{Binding SubSymbols}">
+                    <TextBlock Text="{Binding InstanceName}"/>
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
         </TreeView>

@@ -17,6 +17,8 @@ namespace TcADSNet_Demo.Model
     {
         public static EventHandler evAdsConnected;
         public static EventHandler evAdsDisconnected;
+        public static EventHandler evAdsIsDisconnecting;
+
 
         #region Variables
         private TcAdsClient _client;
@@ -47,6 +49,17 @@ namespace TcADSNet_Demo.Model
             set { _adsPort = value; }
         }
 
+
+        private List<String> _connectionAssociation;
+
+        public List<String> ConnectionAssociation
+        {
+            get { return _connectionAssociation; }
+            set { _connectionAssociation = value; }
+        }
+
+
+
         private static AdsConn _instance;
         public static AdsConn Instance
         {
@@ -56,12 +69,15 @@ namespace TcADSNet_Demo.Model
             }
             private set { _instance = value; }
         }
+
+        
         #endregion
 
 
         public AdsConn()
         {
             Client = new TcAdsClient();
+            ConnectionAssociation = new List<String>();
         }
         public AdsConn(String netid, String port)
         {
@@ -111,11 +127,18 @@ namespace TcADSNet_Demo.Model
         {
             if (Client.IsConnected)
             {
+                ///Rise event IsDisconnecting to tell tasks to stop using Client's Connection
+                evAdsIsDisconnecting?.Invoke(this, EventArgs.Empty);
+                ///wait tasks to free connection usage
+                while(ConnectionAssociation.Count > 0)
+                {
+                    Thread.Sleep(10);
+                }
                 Client.Disconnect();
                 IsConnected = false;
                 ///Rise event
                 evAdsDisconnected?.Invoke(this, EventArgs.Empty);
-
+                
                 MessageBox.Show("Client Disconnected.");
             }
         }
@@ -137,6 +160,28 @@ namespace TcADSNet_Demo.Model
 
             return symbLoader;
         }
+
+        public void SignInToConnectionAssociation(String name)
+        {
+            ConnectionAssociation.Add(name);
+        }
+
+        public void SignOutFromConnectionAssociation(String name)
+        {
+            if (!ConnectionAssociation.Remove(name))
+            {
+                ///Message if Remove from list fails. Item not found.
+                var response = MessageBox.Show("Fail to Sign Out "+name+" From ConnectionAssociation List!\nForce to Sign Out?","Ads Connection",
+                                MessageBoxButtons.YesNo);
+                ///Force Sign Out by creating new empty list
+                if (response == DialogResult.Yes)
+                {
+                    ConnectionAssociation = new List<string>();
+                    MessageBox.Show("Forced Signed Out From ConnectionAssociation", "Ads Connection");
+                }
+            }
+        }
+
 
     }///Class
 }
