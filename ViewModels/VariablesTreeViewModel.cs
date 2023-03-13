@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TcADSNet_Demo.Model;
+using TcADSNet_Demo.Views;
 using TwinCAT.Ads.TypeSystem;
 using TwinCAT.TypeSystem;
 using TwinCAT.TypeSystem.Generic;
@@ -35,6 +36,12 @@ namespace TcADSNet_Demo.ViewModels
             set { SetProperty(ref _twincatSymbols, value); }
         }
 
+        private ObservableCollection<Symbol> _selectedSymbols;
+        public ObservableCollection<Symbol> SelectedSymbols
+        {
+            get { return _selectedSymbols; }
+            set { SetProperty(ref _selectedSymbols, value); }
+        }
 
 
 
@@ -42,11 +49,18 @@ namespace TcADSNet_Demo.ViewModels
         {
             AdsConn.evAdsConnected      += AdsConn_evAdsConnected;
             AdsConn.evAdsDisconnected   += AdsConn_evAdsDisconnected;
+            VariablesTree.evAddSymbolToSelectedSymbols += VariablesTree_evAddSymbolToSelectedSymbols;
 
+            SelectedSymbols = new ObservableCollection<Symbol>();
             GetPlcSymbols();
         }
 
-        #region Event Listener
+        #region Event Listeners
+        private void VariablesTree_evAddSymbolToSelectedSymbols(object sender, Symbol e)
+        {
+            AddToSelectedSymbols(e);
+        }
+                
         private void AdsConn_evAdsDisconnected(object sender, EventArgs e)
         {
             ///Update _membersCollection when ADS Disconnected
@@ -129,6 +143,32 @@ namespace TcADSNet_Demo.ViewModels
         //    return _symbol;
         //}
         #endregion
+
+        public void AddToSelectedSymbols(Symbol symbol)
+        {
+            SelectedSymbols.Add(symbol);
+        }
+
+        public bool RemoveFromSelectedSymbols(Symbol symbol)
+        {
+            int index = 0;
+            bool itemFound = false;
+            
+            for (int i = 0; i < SelectedSymbols.Count; i++)
+            {
+                if (SelectedSymbols[i].InstancePath.Equals(symbol.InstancePath))
+                {
+                    itemFound = true;
+                    index = i;
+                    i = SelectedSymbols.Count; ///Force stop loop
+                }
+            }
+            ///Remove element if found in collection
+            if (itemFound) SelectedSymbols.RemoveAt(index);
+
+            return itemFound;
+        }
+
 
         }///Class
     }

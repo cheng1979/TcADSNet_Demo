@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TcADSNet_Demo.Model;
+using TwinCAT.Ads.TypeSystem;
 
 namespace TcADSNet_Demo.Views
 {
@@ -21,13 +22,22 @@ namespace TcADSNet_Demo.Views
     /// </summary>
     public partial class VariablesTree : UserControl
     {
+        public static EventHandler<Symbol> evAddSymbolToSelectedSymbols;
+
+        private Symbol _selectedSymbol { get; set; }
+
+
         public VariablesTree()
         {
             InitializeComponent();
             
         }
 
-        
-
+        private void TreeViewSecondVariables_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Symbol selection = (Symbol)TreeViewSecondVariables.SelectedItem;
+            /// Rise event to add symbol to SelectedSymbols
+            evAddSymbolToSelectedSymbols?.Invoke(this, selection);
+        }
     }
 }

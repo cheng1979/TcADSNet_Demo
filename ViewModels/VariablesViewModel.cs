@@ -37,8 +37,8 @@ namespace TcADSNet_Demo.ViewModels
 
         public VariablesViewModel()
         {
-            Variables.evAdsDebugClicked += IO_evAdsDebugClicked;
-            Menu.evStartClientRead      += Menu_evStartClientRead;
+            Variables.evAdsDebugClicked  += IO_evAdsDebugClicked;
+            Menu.evStartClientRead       += Menu_evStartClientRead;
             AdsConn.evAdsIsDisconnecting += AdsConn_evAdsIsDisconnecting;
 
 
@@ -50,14 +50,15 @@ namespace TcADSNet_Demo.ViewModels
         {
             ///ADS is about to disconnect
             ///Sign out from Ads Connection usage control list and end the Thread
-            AdsConn.Instance.SignOutFromConnectionAssociation("Thread_ContinuousReadAny");
+            //AdsConn.Instance.SignOutFromConnectionAssociation("Thread_ContinuousReadAny");
             _endThreadReadAny = true;
         }
 
         private void IO_evAdsDebugClicked(object sender, EventArgs e)
         {
             //ReadValueOnce();
-            
+
+            Console.WriteLine("Connection Association Count = " + AdsConn.Instance.ConnectionAssociation.Count);
         }
 
         private void Menu_evStartClientRead(object sender, EventArgs e)
@@ -112,12 +113,11 @@ namespace TcADSNet_Demo.ViewModels
             {
                 Console.WriteLine("ADS Error: " + ex.Message);
                 MessageBox.Show("ADS Read Error!\n" + ex.Message);
-                ///Sign out from Ads Connection usage control list
-                AdsConn.Instance.SignOutFromConnectionAssociation("Thread_ContinuousReadAny");
             }
             finally
             {
-                
+                ///Sign out from Ads Connection usage control list
+                AdsConn.Instance.SignOutFromConnectionAssociation("Thread_ContinuousReadAny");
             }
         }
 

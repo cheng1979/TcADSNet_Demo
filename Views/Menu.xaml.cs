@@ -48,7 +48,7 @@ namespace TcADSNet_Demo.Views
             /// first region added will be the one shown on App loaded.
             MyRegions.MainRegion.Add(_container.Resolve<MenuItems>(),   RegionsName.MenuItems);
             MyRegions.MainRegion.Add(_container.Resolve<MoveDemo>(),    RegionsName.MoveDemo);
-            MyRegions.MainRegion.Add(_container.Resolve<Variables>(),    RegionsName.Variables);
+            //MyRegions.MainRegion.Add(_container.Resolve<Variables>(),    RegionsName.Variables);
             MyRegions.MainRegion.Add(_container.Resolve<IoDevices>(),    RegionsName.IoDevices);
 
 

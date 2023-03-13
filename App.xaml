@@ -5,6 +5,6 @@
              xmlns:local="clr-namespace:TcADSNet_Demo">
     <!--StartupUri="Views/Menu.xaml" : if not using regions need to add StartupUri property in Application-->
     <Application.Resources>
-         
+        
     </Application.Resources>
 </prism:PrismApplication>

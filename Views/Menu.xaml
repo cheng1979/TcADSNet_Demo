@@ -7,7 +7,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Menu" Height="675" Width="1200">
+        Title="Menu" Height="715" Width="1200">
     <Window.Resources>
         <!--TopMenu Button-->
         <Style x:Key="TopMenuButton" TargetType="Button">
@@ -102,7 +102,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Background="#3e657d">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
@@ -139,7 +139,8 @@
             </StackPanel>
         </Grid>
         <!--Body Content-->
-        <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="5">
+        <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="5"
+              Background="#152429">
             <ContentControl prism:RegionManager.RegionName="BodyContent"/>
         </Grid>
     </Grid>

@@ -1,0 +1,34 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!--Border Menu Base - Left-->
+    <Style x:Key="BorderMenuBase_Left" TargetType="Border">
+        <!--<Setter Property="Background" Value="#4287f5"/>-->
+        <!--<Setter Property="Background" Value="#3b6e78"/>-->
+        <Setter Property="Background" Value="#29383d"/>
+        <Setter Property="CornerRadius" Value="0 30 0 30"/>
+    </Style>
+
+    <!--Border DataGrid - Selected Symbols List-->
+    <Style x:Key="BorderDatagridBase" TargetType="Border">
+        <!--<Setter Property="Background" Value="#4287f5"/>-->
+        <!--<Setter Property="Background" Value="#2f5961"/>-->
+        <Setter Property="Background" Value="#1f2e33"/> 
+        <Setter Property="CornerRadius" Value="30"/>
+    </Style>
+
+    <!--Tree View-->
+    <Style x:Key="TreeViewStyle" TargetType="TreeView">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+    </Style>
+    
+    <!--Header TextBlock-->
+    <Style x:Key="TextBlockHeader1" TargetType="TextBlock">
+        <Setter Property="FontSize"               Value="25"/>
+        <Setter Property="Foreground"           Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+</ResourceDictionary>

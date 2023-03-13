@@ -7,7 +7,7 @@
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="555" d:DesignWidth="1180">
+             d:DesignHeight="500" d:DesignWidth="1160">
     <UserControl.Resources>
         <Style x:Key="ItemText" TargetType="TextBlock">
             <Setter Property="FontSize" Value="15"/>

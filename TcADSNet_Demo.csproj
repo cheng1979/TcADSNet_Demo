@@ -148,6 +148,10 @@
     <Compile Include="Views\VariablesTree.xaml.cs">
       <DependentUpon>VariablesTree.xaml</DependentUpon>
     </Compile>
+    <Page Include="Themes\GlobalThemes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\IoDevices.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

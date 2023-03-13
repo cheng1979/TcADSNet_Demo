@@ -28,8 +28,8 @@ namespace TcADSNet_Demo.Views
         private void BtnItemVariablesView_Click(object sender, RoutedEventArgs e)
         {
             /// Activate Variables View
-            var view = MyRegions.MainRegion.GetView(RegionsName.Variables);
-            MyRegions.MainRegion.Activate(view);
+            //var view = MyRegions.MainRegion.GetView(RegionsName.Variables);
+            //MyRegions.MainRegion.Activate(view);
         }
 
         private void BtnItemIODevices_Click(object sender, RoutedEventArgs e)

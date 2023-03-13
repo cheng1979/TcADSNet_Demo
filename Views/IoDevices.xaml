@@ -23,7 +23,8 @@
                                 BorderThickness="0,1,1,0">
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
-                                              TextElement.FontWeight="Normal"/>
+                                              TextElement.FontWeight="Normal"
+                                              TextElement.Foreground="White"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -38,9 +39,9 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button x:Name="BtnViewVariablesTree" Style="{StaticResource ButtonRegions}"
-                    Content="Variables Tree"/>
+                    Content="Variables Tree" Click="BtnViewVariablesTree_Click"/>
             <Button x:Name="BtnViewVariables" Style="{StaticResource ButtonRegions}"
-                    Content="Variables"/>
+                    Content="Variables" Click="BtnViewVariables_Click"/>
         </StackPanel>
         <ContentControl Grid.Row="1"
             prism:RegionManager.RegionName="IoDevicesContent"/>
