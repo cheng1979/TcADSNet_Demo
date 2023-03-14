@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TcADSNet_Demo.Model;
 using TcADSNet_Demo.Views;
 using TwinCAT.Ads.TypeSystem;
@@ -50,17 +51,45 @@ namespace TcADSNet_Demo.ViewModels
             AdsConn.evAdsConnected      += AdsConn_evAdsConnected;
             AdsConn.evAdsDisconnected   += AdsConn_evAdsDisconnected;
             VariablesTree.evAddSymbolToSelectedSymbols += VariablesTree_evAddSymbolToSelectedSymbols;
+            VariablesTree.evSaveSelectedSymbolsList += VariablesTree_evSaveSelectedSymbolsList;
 
             SelectedSymbols = new ObservableCollection<Symbol>();
             GetPlcSymbols();
         }
 
         #region Event Listeners
+        private void VariablesTree_evSaveSelectedSymbolsList(object sender, EventArgs e)
+        {
+            try
+            {
+                bool fileSaved = false;
+                if(SelectedSymbols != null)
+                {
+                    ///Convert Twincat Symbol to MySymbol type to allow JsonConvert without "Self Referencing Loop" issue
+                    SymbolsCollection symbolsCollection = new SymbolsCollection(SelectedSymbols);
+                    fileSaved = ConfigFile.SaveFile_SymbolsPool(symbolsCollection);
+                }
+                if (fileSaved)
+                {
+                    MessageBox.Show("Symbols Selection Saved", "SAVE SYMBOLS SELECTION");
+                }
+                else
+                {
+                    MessageBox.Show("Error on Saving Symbol Selection!", "SAVE ERROR");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nExecption Error:\n" + ex.Message);
+            }
+
+        }
+        
         private void VariablesTree_evAddSymbolToSelectedSymbols(object sender, Symbol e)
         {
             AddToSelectedSymbols(e);
         }
-                
+        
         private void AdsConn_evAdsDisconnected(object sender, EventArgs e)
         {
             ///Update _membersCollection when ADS Disconnected
@@ -146,7 +175,27 @@ namespace TcADSNet_Demo.ViewModels
 
         public void AddToSelectedSymbols(Symbol symbol)
         {
-            SelectedSymbols.Add(symbol);
+            /// Add Symbol that isn't already in the collection and if Symbol doesn't have SubSymbols
+            bool noSubSymbol = true;
+            bool alreadyInCollection = false;
+            /// Verify if symbol has subsymbols
+            if (symbol.SubSymbolCount > 0) noSubSymbol = false;
+            /// Verify if symbol is already in collection
+            for (int i = 0; i < SelectedSymbols.Count; i++)
+            {
+                if (SelectedSymbols[i].InstancePath.Equals(symbol.InstancePath))
+                {
+                    alreadyInCollection = true;
+                    i = SelectedSymbols.Count; ///End the loop
+                }
+            }
+            
+            /// Add to collection if meets requirements
+            if(noSubSymbol && !alreadyInCollection)
+            {
+                SelectedSymbols.Add(symbol);
+            }
+            
         }
 
         public bool RemoveFromSelectedSymbols(Symbol symbol)

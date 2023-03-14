@@ -34,7 +34,8 @@
                     <HierarchicalDataTemplate
                                     DataType="{x:Type twincat:Symbol}"
                                     ItemsSource="{Binding SubSymbols}">
-                        <TextBlock Text="{Binding InstanceName}"/>
+                        <TextBlock Text="{Binding InstanceName}"
+                                   Foreground="white"/>
                     </HierarchicalDataTemplate>
                 </TreeView.Resources>
             </TreeView>
@@ -54,17 +55,107 @@
         </GridSplitter>
         <!--Variables Selected List-->
         <Border Grid.Column="2" Style="{StaticResource BorderDatagridBase}">
-            <StackPanel Orientation="Vertical">
-                <!--Header Title-->
-                <Grid Height="40">
-                    <TextBlock Style="{StaticResource TextBlockHeader1}">Selected Symbols</TextBlock>
-                </Grid>
-                <!--Content-->
-                <DataGrid x:Name="DataGridSelectedSymbols">
-                    
-                </DataGrid>
-                
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2"/>
+                </Grid.ColumnDefinitions>
+                <!--Column 1-->
+                <StackPanel Grid.Column="1" Orientation="Vertical">
+                    <!--Header Title-->
+                    <Grid Height="40">
+                        <TextBlock Style="{StaticResource TextBlockHeader1}">Selected Symbols</TextBlock>
+                        <Button x:Name="BtnSaveSelectedSymbols" 
+                                Content="Save"
+                                Width="60" Height="25"
+                                Margin="0 0 10 -10"
+                                HorizontalAlignment="Right" Click="BtnSaveSelectedSymbols_Click"/>
+                    </Grid>
+                    <!--Content-->
+                    <DataGrid x:Name="DataGridSelectedSymbols"
+                              ItemsSource="{Binding SelectedSymbols}"
+                              AutoGenerateColumns="False"
+                              CanUserSortColumns="True"
+                              RowHeight="30"
+                              Margin="1 5 1 5">
+                        <DataGrid.Columns>
+                            <!--Name-->
+                            <DataGridTemplateColumn Header="Name">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=InstanceName}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <!--Path-->
+                            <DataGridTemplateColumn Header="Type">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=InstancePath}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <!--Type-->
+                            <DataGridTemplateColumn Header="Type">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=DataType.Name}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <!--Column 2-->
+                <Separator Grid.Column="2"
+                           Background="#2d434a"
+                           Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+                <!--Column 3-->
+                <StackPanel Grid.Column="3" Orientation="Vertical">
+                    <!--Header Title-->
+                    <Grid Height="40">
+                        <TextBlock Style="{StaticResource TextBlockHeader1}">Symbols Pool</TextBlock>
+                    </Grid>
+                    <!--Content-->
+                    <DataGrid x:Name="DataGridSymbolsPool"
+                              ItemsSource="{Binding SelectedSymbols}"
+                              AutoGenerateColumns="False"
+                              CanUserSortColumns="True"
+                              RowHeight="30"
+                              Margin="1 5 1 5">
+                        <DataGrid.Columns>
+                            <!--Name-->
+                            <DataGridTemplateColumn Header="Name">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=InstanceName}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <!--Path-->
+                            <DataGridTemplateColumn Header="Type">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=InstancePath}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <!--Type-->
+                            <DataGridTemplateColumn Header="Type">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=DataType.Name}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Grid>
+            
         </Border>
         
 

@@ -109,7 +109,7 @@ namespace TcADSNet_Demo.Model
                     ///Rise event when connection acquired
                     evAdsConnected?.Invoke(this, EventArgs.Empty);
 
-                    MessageBox.Show("ADS Connection Status = " + Client.IsConnected.ToString());
+                    //MessageBox.Show("ADS Connection Status = " + Client.IsConnected.ToString());
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace TcADSNet_Demo.Model
                 ///Rise event
                 evAdsDisconnected?.Invoke(this, EventArgs.Empty);
                 
-                MessageBox.Show("Client Disconnected.");
+                //MessageBox.Show("Client Disconnected.");
             }
         }
 

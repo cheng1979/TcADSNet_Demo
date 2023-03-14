@@ -23,6 +23,7 @@ namespace TcADSNet_Demo.Views
     public partial class VariablesTree : UserControl
     {
         public static EventHandler<Symbol> evAddSymbolToSelectedSymbols;
+        public static EventHandler evSaveSelectedSymbolsList;
 
         private Symbol _selectedSymbol { get; set; }
 
@@ -38,6 +39,11 @@ namespace TcADSNet_Demo.Views
             Symbol selection = (Symbol)TreeViewSecondVariables.SelectedItem;
             /// Rise event to add symbol to SelectedSymbols
             evAddSymbolToSelectedSymbols?.Invoke(this, selection);
+        }
+
+        private void BtnSaveSelectedSymbols_Click(object sender, RoutedEventArgs e)
+        {
+            evSaveSelectedSymbolsList?.Invoke(this, EventArgs.Empty);
         }
     }
 }
