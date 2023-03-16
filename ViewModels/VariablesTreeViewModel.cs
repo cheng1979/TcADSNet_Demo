@@ -44,6 +44,18 @@ namespace TcADSNet_Demo.ViewModels
             set { SetProperty(ref _selectedSymbols, value); }
         }
 
+        private SymbolsCollection _symbolsPoll;
+        public SymbolsCollection SymbolsPoll
+        {
+            get { return _symbolsPoll; }
+            set
+            {
+                SetProperty(ref _symbolsPoll, value);
+                StaticSymbolsPoll = _symbolsPoll;
+            }
+        }
+
+        public static SymbolsCollection StaticSymbolsPoll { get; private set; }
 
 
         public VariablesTreeViewModel()
@@ -52,25 +64,39 @@ namespace TcADSNet_Demo.ViewModels
             AdsConn.evAdsDisconnected   += AdsConn_evAdsDisconnected;
             VariablesTree.evAddSymbolToSelectedSymbols += VariablesTree_evAddSymbolToSelectedSymbols;
             VariablesTree.evSaveSelectedSymbolsList += VariablesTree_evSaveSelectedSymbolsList;
+            VariablesTree.evDeleteSymbolFromSelectedSymbols += VariablesTree_evDeleteSymbolFromSelectedSymbols;
 
             SelectedSymbols = new ObservableCollection<Symbol>();
             GetPlcSymbols();
+            UpdadeSymbolsPollFromFile_OnLoad();
+            UpdateSelectedSymbolsFromFile_OnLoad();
         }
 
+
         #region Event Listeners
+        private void VariablesTree_evDeleteSymbolFromSelectedSymbols(object sender, Symbol e)
+        {
+            RemoveSymbolFromSelectedSymbolsCollection(e);
+
+        }
+
         private void VariablesTree_evSaveSelectedSymbolsList(object sender, EventArgs e)
         {
             try
             {
                 bool fileSaved = false;
-                if(SelectedSymbols != null)
+                SymbolsCollection symbolsCollection_beforeSave = new SymbolsCollection();
+                if (SelectedSymbols != null)
                 {
                     ///Convert Twincat Symbol to MySymbol type to allow JsonConvert without "Self Referencing Loop" issue
-                    SymbolsCollection symbolsCollection = new SymbolsCollection(SelectedSymbols);
-                    fileSaved = ConfigFile.SaveFile_SymbolsPool(symbolsCollection);
+                    symbolsCollection_beforeSave.ConvertTwincatSymbolToMySymbol_Collection(SelectedSymbols);
+                    fileSaved = ConfigFile.SaveFile_SymbolsPool(symbolsCollection_beforeSave);
+
                 }
                 if (fileSaved)
                 {
+                    /// Update Symbols Poll if save file successfully
+                    SymbolsPoll = symbolsCollection_beforeSave;
                     MessageBox.Show("Symbols Selection Saved", "SAVE SYMBOLS SELECTION");
                 }
                 else
@@ -92,16 +118,19 @@ namespace TcADSNet_Demo.ViewModels
         
         private void AdsConn_evAdsDisconnected(object sender, EventArgs e)
         {
-            ///Update _membersCollection when ADS Disconnected
+            ///Update TwncatSymbols when ADS Disconnected
             GetPlcSymbols();
+            UpdateSelectedSymbolsFromFile();
         }
 
         private void AdsConn_evAdsConnected(object sender, EventArgs e)
         {
             ///Update _membersCollection when ADS Connection Acquired
             GetPlcSymbols();
+            UpdateSelectedSymbolsFromFile();
         }
-        #endregion
+        #endregion///Event Listeners
+
 
         public void GetPlcSymbols()
         {
@@ -218,6 +247,89 @@ namespace TcADSNet_Demo.ViewModels
             return itemFound;
         }
 
+        private void UpdadeSymbolsPollFromFile_OnLoad()
+        {
+            SymbolsPoll = ConfigFile.ReadFile_SymbolsPool();
+        }
+
+        private void UpdateSelectedSymbolsFromFile_OnLoad()
+        {
+            #region Debug
+            //long initialTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            #endregion
+
+            if (AdsConn.Instance.Client.IsConnected)
+            {
+                ObservableCollection<Symbol> newcol = new ObservableCollection<Symbol>();
+                foreach (Symbol symb in TwincatSymbols)
+                {
+                    foreach (MySymbol item in SymbolsPoll.Collection)
+                    {
+                        FindRecursively(symb, item, ref newcol);
+                    }
+                }
+                SelectedSymbols = newcol;
+            }
+
+            #region Debug
+            //long finalTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            //Console.WriteLine("\nUpdate Selected Symbols Elapsed Time\n" + (finalTime - initialTime)+" ms\n");
+            #endregion
+        }
+
+        private void UpdateSelectedSymbolsFromFile()
+        {
+            ObservableCollection<Symbol> newcol = new ObservableCollection<Symbol>();
+            if (TwincatSymbols != null)
+            {
+                foreach (Symbol symb in TwincatSymbols)
+                {
+                    foreach (MySymbol item in SymbolsPoll.Collection)
+                    {
+                        FindRecursively(symb, item, ref newcol);
+                    }
+                }
+            }
+            SelectedSymbols = newcol;
+            
+        }
+
+        private void FindRecursively(Symbol symbols, MySymbol refSymbol, ref ObservableCollection<Symbol> col)
+        {
+            //bool isFound = false;
+            if (symbols.InstancePath.Equals(refSymbol.Path))
+            {
+                col.Add(symbols);
+                //isFound = true;
+            }
+            if(symbols.SubSymbolCount > 0)
+            {
+                foreach (Symbol item in symbols.SubSymbols)
+                {
+                    FindRecursively(item, refSymbol, ref col);
+                }
+
+                #region Using Stop Loop Method - Commented
+                /// The method below was slower then the method above in the test with small subsymbols collections
+                
+                //for (int i = 0; i < symbols.SubSymbols.Count; i++)
+                //{
+                //    FindRecursively((Symbol)symbols.SubSymbols[i], refSymbol, ref col);
+                //    if (isFound) i = symbols.SubSymbols.Count;                          /// Stop the loop
+                //}
+                #endregion
+            }
+        }
+
+
+        private void RemoveSymbolFromSelectedSymbolsCollection(Symbol symbol)
+        {
+            if(SelectedSymbols != null)
+            {
+                SelectedSymbols.Remove(symbol);
+            }
+        }
+
 
         }///Class
-    }
+}

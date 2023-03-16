@@ -30,11 +30,25 @@ namespace TcADSNet_Demo.Model
             set { _type = value; }
         }
 
+        private Object _value;
+        public Object Value
+        {
+            get { return _value; }
+            set { _value = value; }
+        }
+
+        public MySymbol()
+        {
+
+        }
         public MySymbol(Symbol symbol)
         {
-            Name = symbol.InstanceName;
-            Path = symbol.InstancePath;
-            Type = symbol.DataType.Name;
+            if (symbol != null)
+            {
+                Name = symbol.InstanceName;
+                Path = symbol.InstancePath;
+                Type = symbol.DataType.Name;
+            }
         }
 
 

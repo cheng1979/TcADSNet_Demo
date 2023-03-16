@@ -7,7 +7,9 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Menu" Height="715" Width="1200">
+        WindowStartupLocation="CenterScreen"
+        Title="Menu"
+        Height="715" Width="1200">
     <Window.Resources>
         <!--TopMenu Button-->
         <Style x:Key="TopMenuButton" TargetType="Button">

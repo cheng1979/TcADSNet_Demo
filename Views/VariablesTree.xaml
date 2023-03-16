@@ -7,6 +7,7 @@
              xmlns:model="clr-namespace:TcADSNet_Demo.Model"
              xmlns:twincat="clr-namespace:TwinCAT.Ads.TypeSystem;assembly=TwinCAT.Ads"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="1160">
@@ -72,13 +73,16 @@
                                 Content="Save"
                                 Width="60" Height="25"
                                 Margin="0 0 10 -10"
-                                HorizontalAlignment="Right" Click="BtnSaveSelectedSymbols_Click"/>
+                                HorizontalAlignment="Right"
+                                Cursor="Hand"
+                                Click="BtnSaveSelectedSymbols_Click"/>
                     </Grid>
                     <!--Content-->
                     <DataGrid x:Name="DataGridSelectedSymbols"
                               ItemsSource="{Binding SelectedSymbols}"
                               AutoGenerateColumns="False"
                               CanUserSortColumns="True"
+                              CanUserAddRows="False"
                               RowHeight="30"
                               Margin="1 5 1 5">
                         <DataGrid.Columns>
@@ -103,6 +107,17 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=DataType.Name}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <!--Icon Delete-->
+                            <DataGridTemplateColumn Header="Delete">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconMaterial x:Name="IconDeleteSymbol"
+                                                                    Kind="Delete"
+                                                                    Width="15" Height="15"
+                                                                    Style="{StaticResource IconDelete}" MouseLeftButtonUp="IconDeleteSymbol_MouseLeftButtonUp"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -117,13 +132,15 @@
                 <StackPanel Grid.Column="3" Orientation="Vertical">
                     <!--Header Title-->
                     <Grid Height="40">
-                        <TextBlock Style="{StaticResource TextBlockHeader1}">Symbols Pool</TextBlock>
+                        <TextBlock Style="{StaticResource TextBlockHeader1}">Symbols Poll</TextBlock>
+                        <TextBlock Text="{Binding SymbolsPoll.Collection.Count}" Foreground="White"/>
                     </Grid>
                     <!--Content-->
                     <DataGrid x:Name="DataGridSymbolsPool"
-                              ItemsSource="{Binding SelectedSymbols}"
+                              ItemsSource="{Binding SymbolsPoll.Collection}"
                               AutoGenerateColumns="False"
                               CanUserSortColumns="True"
+                              CanUserAddRows="False"
                               RowHeight="30"
                               Margin="1 5 1 5">
                         <DataGrid.Columns>
@@ -131,15 +148,15 @@
                             <DataGridTemplateColumn Header="Name">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=InstanceName}"/>
+                                        <TextBlock Text="{Binding Path=Name}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <!--Path-->
-                            <DataGridTemplateColumn Header="Type">
+                            <DataGridTemplateColumn Header="Path">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=InstancePath}"/>
+                                        <TextBlock Text="{Binding Path=Path}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -147,7 +164,7 @@
                             <DataGridTemplateColumn Header="Type">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=DataType.Name}"/>
+                                        <TextBlock Text="{Binding Path=Type}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

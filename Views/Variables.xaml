@@ -9,10 +9,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="1160">
     <UserControl.Resources>
-        <Style x:Key="ItemText" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="15"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/GlobalThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="ItemText" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="15"/>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -24,7 +31,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource ItemText}"
                    Text="VARIABLE"/>
@@ -35,11 +42,56 @@
                    Text="Value"/>
             <Button x:Name="BtnDebug" Content="Debug" Click="BtnDebug_Click"/>
         </StackPanel>
-        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource ItemText}"
-                   x:Name="Var1_Lable" Text="VAR1"/>
-        <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource ItemText}"
-                   x:Name="Var1_Type" Text="Type"/>
-        <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource ItemText}"
-                   x:Name="Var1_Value" Text="{Binding PlcIsAlivePulse}"/>
+        <!--DataGrid StackPanel-->
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="4" Orientation="Vertical">
+            <!--Header Title-->
+            <Grid Height="40">
+                <TextBlock Style="{StaticResource TextBlockHeader1}">Symbols Poll</TextBlock>
+            </Grid>
+            <!--Content-->
+            <DataGrid x:Name="DataGridSymbolsPoolValues"
+                      ItemsSource="{Binding ReadSymbolsCollection}"
+                      AutoGenerateColumns="False"
+                      CanUserSortColumns="True"
+                      CanUserAddRows="False"
+                      RowHeight="30"
+                      Background="LightGray"     
+                      Margin="1 5 1 5">
+                <DataGrid.Columns>
+                    <!--Name-->
+                    <DataGridTemplateColumn Header="Name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Name}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--Path-->
+                    <DataGridTemplateColumn Header="Type">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Path}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--Type-->
+                    <DataGridTemplateColumn Header="Type">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Type}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--Value-->
+                    <DataGridTemplateColumn Header="Value">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Value}" Foreground="Gray"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </UserControl>

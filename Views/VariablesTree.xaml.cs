@@ -24,6 +24,7 @@ namespace TcADSNet_Demo.Views
     {
         public static EventHandler<Symbol> evAddSymbolToSelectedSymbols;
         public static EventHandler evSaveSelectedSymbolsList;
+        public static EventHandler<Symbol> evDeleteSymbolFromSelectedSymbols;
 
         private Symbol _selectedSymbol { get; set; }
 
@@ -44,6 +45,20 @@ namespace TcADSNet_Demo.Views
         private void BtnSaveSelectedSymbols_Click(object sender, RoutedEventArgs e)
         {
             evSaveSelectedSymbolsList?.Invoke(this, EventArgs.Empty);
+        }
+
+        
+        private void IconDeleteSymbol_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Symbol selection = (Symbol)DataGridSelectedSymbols.SelectedItem;
+
+            MessageBoxResult userChoice = MessageBox.Show("Confirm Delete Symbol\nName = " + selection.InstanceName +
+                                                          "\nPath = " + selection.InstancePath, "DELETE SYMBOL", MessageBoxButton.YesNo);
+            if (userChoice == MessageBoxResult.Yes)
+            {
+                /// Rise event to preceed Delete Symbol
+                evDeleteSymbolFromSelectedSymbols?.Invoke(this, selection);
+            }
         }
     }
 }

@@ -30,7 +30,6 @@ namespace TcADSNet_Demo.Views
 
         private void BtnDebug_Click(object sender, RoutedEventArgs e)
         {
-            /// Request for read value
             evAdsDebugClicked?.Invoke(this, EventArgs.Empty);
         }
     }

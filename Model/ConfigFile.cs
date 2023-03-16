@@ -50,15 +50,14 @@ namespace TcADSNet_Demo.Model
             return isSaved;
         }
 
-        public static ObservableCollection<Symbol> ReadFile_SymbolsPool()
+        public static SymbolsCollection ReadFile_SymbolsPool()
         {
             String filePath = ConfigFile.filePath_symbolsPollConfig;
-            //Symbol[] sym = new Symbol[1];
-            ObservableCollection<Symbol> syms = new ObservableCollection<Symbol>();
+            SymbolsCollection syms = new SymbolsCollection();
 
             if (File.Exists(filePath))
             {
-                syms = ConvertJsonToSymbols(File.ReadAllText(filePath));
+                syms.Collection = ConvertJsonToSymbols(File.ReadAllText(filePath));
             }
 
             return syms;
@@ -83,13 +82,13 @@ namespace TcADSNet_Demo.Model
             return ret;
         }
 
-        private static ObservableCollection<Symbol> ConvertJsonToSymbols(String jsonObj)
+        private static ObservableCollection<MySymbol> ConvertJsonToSymbols(String jsonObj)
         {
-            ObservableCollection<Symbol> symbols;
+            ObservableCollection<MySymbol> collection;
             
-            symbols = JsonConvert.DeserializeObject<ObservableCollection<Symbol>>(jsonObj);
+            collection = JsonConvert.DeserializeObject<ObservableCollection<MySymbol>>(jsonObj);
             
-            return symbols;
+            return collection;
         }
 
     }///Class

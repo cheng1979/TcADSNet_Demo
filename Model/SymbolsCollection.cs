@@ -11,9 +11,10 @@ namespace TcADSNet_Demo.Model
 {
     public class SymbolsCollection
     {
-        [JsonIgnore]
         public ObservableCollection<MySymbol> Collection { get; set; }
 
+
+        #region Constructor
         public SymbolsCollection()
         {
             Collection = new ObservableCollection<MySymbol>();
@@ -28,8 +29,9 @@ namespace TcADSNet_Demo.Model
         {
             ConvertTwincatSymbolToMySymbol_Collection(symbols);
         }
+        #endregion
 
-
+        #region Methods
         public void SetCollection(ObservableCollection<MySymbol> mySymbols)
         {
             Collection = mySymbols;
@@ -44,6 +46,6 @@ namespace TcADSNet_Demo.Model
                 Collection.Add(new MySymbol(item));
             }
         }
-
+        #endregion
     }///Class
 }
