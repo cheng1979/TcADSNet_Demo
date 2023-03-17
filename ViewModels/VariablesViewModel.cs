@@ -9,6 +9,7 @@ using System.Windows;
 using Prism.Mvvm;
 using TcADSNet_Demo.Model;
 using TcADSNet_Demo.Views;
+using TwinCAT.Ads;
 using TwinCAT.Ads.SumCommand;
 using TwinCAT.TypeSystem;
 //using TwinCAT.Ads;
@@ -64,6 +65,7 @@ namespace TcADSNet_Demo.ViewModels
 
 
         #region Events Listener
+
         private void AdsConn_evAdsIsDisconnecting(object sender, EventArgs e)
         {
             ///ADS is about to disconnect
@@ -170,6 +172,7 @@ namespace TcADSNet_Demo.ViewModels
 
         private void ContinuousReadBlockAny()
         {
+            bool hasReadException = false;
             uint[] handles = new uint[] { };
             try
             {
@@ -185,7 +188,13 @@ namespace TcADSNet_Demo.ViewModels
                     /// Create Sum Handles
                     SumCreateHandles sumHandles = new SumCreateHandles(AdsConn.Instance.Client, instancePathList);
                     /// Handles and Value Types
+                     
                     handles = sumHandles.CreateHandles();
+                    //String[] tryCreate_instancePath = new string[] { };
+                    //AdsErrorCode[] returnCode;
+                    //AdsErrorCode returnCode2;
+                    //returnCode2 = sumHandles.TryCreateHandles(out tryCreate_instancePath, out handles, out returnCode);
+
                     Type[] valueTypes = symbolsInfo.TypesArray;
                     /// Read Command
                     SumHandleRead readCommand = new SumHandleRead(AdsConn.Instance.Client, handles, valueTypes);
@@ -194,7 +203,7 @@ namespace TcADSNet_Demo.ViewModels
 
                     /// Show read values in UI using delegate method
                     /// Use Dispatcher to allow other Thread to manipulate Collection created in UI Thread
-                    App.Current.Dispatcher.Invoke((Action)delegate 
+                    App.Current.Dispatcher.Invoke((Action)delegate
                     {
                         SetReadSymbolsCollection(readValues, symbolsInfo, ReadSymbolsCollection);
                     });
@@ -202,19 +211,36 @@ namespace TcADSNet_Demo.ViewModels
                     /// Set Poll Time
                     Thread.Sleep(500);
                 }
+                /// Delete handles
+                SumReleaseHandles releaseCommand = new SumReleaseHandles(AdsConn.Instance.Client, handles);
+                releaseCommand.ReleaseHandles();
+            }
+            catch (NullReferenceException e)
+            {
+                hasReadException = true;
+                Console.WriteLine(e);
+                MessageBox.Show("ADS Read Error!\n" + e.Message);
+            }
+            catch (AdsSumCommandException ex)
+            {
+                hasReadException = true;
+                Console.WriteLine(ex);
+                MessageBox.Show("ADS Read Error!\n" + ex.Message);
             }
             catch (TwinCAT.Ads.AdsErrorException ex)
             {
+                hasReadException = true;
                 Console.WriteLine("ADS Error: " + ex.Message);
                 MessageBox.Show("ADS Read Error!\n" + ex.Message);
             }
             finally
             {
-                /// Delete handles
-                SumReleaseHandles releaseCommand = new SumReleaseHandles(AdsConn.Instance.Client, handles);
-                releaseCommand.ReleaseHandles();
                 ///Sign out from Ads Connection usage control list
                 AdsConn.Instance.SignOutFromConnectionAssociation("Thread_ContinuousReadBlockAny");
+                if (hasReadException)
+                {
+                    AdsConn.Instance.Disconnect();
+                }
             }
         }
 

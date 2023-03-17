@@ -21,6 +21,7 @@ namespace TcADSNet_Demo.Model
 
 
         #region Variables
+        
         private TcAdsClient _client;
         public TcAdsClient Client
         {
@@ -79,6 +80,7 @@ namespace TcADSNet_Demo.Model
             Client = new TcAdsClient();
             ConnectionAssociation = new List<String>();
         }
+
         public AdsConn(String netid, String port)
         {
             this._netId = netid;
@@ -110,6 +112,8 @@ namespace TcADSNet_Demo.Model
                     evAdsConnected?.Invoke(this, EventArgs.Empty);
 
                     //MessageBox.Show("ADS Connection Status = " + Client.IsConnected.ToString());
+
+                    
                 }
                 else
                 {
@@ -139,7 +143,7 @@ namespace TcADSNet_Demo.Model
                 ///Rise event
                 evAdsDisconnected?.Invoke(this, EventArgs.Empty);
                 
-                //MessageBox.Show("Client Disconnected.");
+                //MessageBox.Show("Client Disconnected. Rise Event.");
             }
         }
 

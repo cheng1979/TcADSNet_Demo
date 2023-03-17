@@ -21,15 +21,23 @@ namespace TcADSNet_Demo.ViewModels
         public MenuViewModel()
         {
             AdsConn.Instance.Client.ConnectionStateChanged += Client_ConnectionStateChanged;
+
             AdsConn.evAdsConnected += AdsConn_evAdsConnected;
             AdsConn.evAdsDisconnected += AdsConn_evAdsDisconnected;
 
             ButtonConnectColor = "Transparent";
         }
 
+        private void VariablesViewModel_evReadValueException(object sender, EventArgs e)
+        {
+            //AdsConn.Instance.Client.Disconnect();
+            
+        }
+
         private void Client_ConnectionStateChanged(object sender, TwinCAT.ConnectionStateChangedEventArgs e)
         {
             Console.WriteLine(e);
+            Console.WriteLine("NewState: {0}, OldState: {1}, Reason: {2}, Exception: {3}",e.NewState, e.OldState, e.Reason, e.Exception);
         }
 
         private void AdsConn_evAdsDisconnected(object sender, EventArgs e)
