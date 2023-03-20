@@ -331,7 +331,7 @@ namespace TcADSNet_Demo.ViewModels
                         retType = typeof(ushort);
                         break;
                     case "UDINT":
-                        retType = typeof(uint);
+                        retType = typeof(uint); 
                         break;
                     case "ULINT":
                         retType = typeof(ulong);
@@ -342,8 +342,12 @@ namespace TcADSNet_Demo.ViewModels
                     case "LREAL":
                         retType = typeof(double);
                         break;
+                    case "TIME":
+                        retType = typeof(TimeSpan);
+                        break;
                     default:
                         break;
+
                 }
             }
             
