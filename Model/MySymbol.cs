@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,15 +40,15 @@ namespace TcADSNet_Demo.Model
 
         public MySymbol()
         {
-
+            
         }
         public MySymbol(Symbol symbol)
         {
             if (symbol != null)
             {
-                Name = symbol.InstanceName;
-                Path = symbol.InstancePath;
-                Type = symbol.DataType.Name;
+                Name     = symbol.InstanceName;
+                Path     = symbol.InstancePath;
+                Type     = symbol.DataType.Name;
             }
         }
 

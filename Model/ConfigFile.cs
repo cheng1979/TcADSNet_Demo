@@ -82,12 +82,13 @@ namespace TcADSNet_Demo.Model
             return ret;
         }
 
+
         private static ObservableCollection<MySymbol> ConvertJsonToSymbols(String jsonObj)
         {
             ObservableCollection<MySymbol> collection;
             
             collection = JsonConvert.DeserializeObject<ObservableCollection<MySymbol>>(jsonObj);
-            
+                        
             return collection;
         }
 

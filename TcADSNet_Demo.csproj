@@ -141,6 +141,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\AdsConn.cs" />
     <Compile Include="Model\ConfigFile.cs" />
+    <Compile Include="Model\DataTypePropertyConverter.cs" />
     <Compile Include="Model\JsonSerializeReturn.cs" />
     <Compile Include="Model\MySymbol.cs" />
     <Compile Include="Model\ReturnObject.cs" />

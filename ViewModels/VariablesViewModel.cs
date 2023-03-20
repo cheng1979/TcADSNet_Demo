@@ -60,7 +60,8 @@ namespace TcADSNet_Demo.ViewModels
             Menu.evStartClientRead       += Menu_evStartClientRead;
             AdsConn.evAdsIsDisconnecting += AdsConn_evAdsIsDisconnecting;
 
-
+            ///Fire Start Client Read if has client connection on Load VariablesViewModel
+            if (AdsConn.Instance.Client.IsConnected) Menu_evStartClientRead(this, EventArgs.Empty);
         }
 
 
@@ -185,28 +186,41 @@ namespace TcADSNet_Demo.ViewModels
                     /// Get Instance Path List and Instance Type List
                     SymbolsInfo symbolsInfo = GetInstancePathListFromSymbolsPoll();
                     String[] instancePathList = symbolsInfo.InstancePathArray;
-                    /// Create Sum Handles
-                    SumCreateHandles sumHandles = new SumCreateHandles(AdsConn.Instance.Client, instancePathList);
-                    /// Handles and Value Types
-                     
-                    handles = sumHandles.CreateHandles();
-                    //String[] tryCreate_instancePath = new string[] { };
-                    //AdsErrorCode[] returnCode;
-                    //AdsErrorCode returnCode2;
-                    //returnCode2 = sumHandles.TryCreateHandles(out tryCreate_instancePath, out handles, out returnCode);
-
-                    Type[] valueTypes = symbolsInfo.TypesArray;
-                    /// Read Command
-                    SumHandleRead readCommand = new SumHandleRead(AdsConn.Instance.Client, handles, valueTypes);
-                    /// Read Values
-                    Object[] readValues = readCommand.Read();
-
-                    /// Show read values in UI using delegate method
-                    /// Use Dispatcher to allow other Thread to manipulate Collection created in UI Thread
-                    App.Current.Dispatcher.Invoke((Action)delegate
+                    /// Exit Method if has nothing to read
+                    if (symbolsInfo.InstancePathArray != null)
                     {
-                        SetReadSymbolsCollection(readValues, symbolsInfo, ReadSymbolsCollection);
-                    });
+                        /// Create Sum Handles
+                        SumCreateHandles sumHandles = new SumCreateHandles(AdsConn.Instance.Client, instancePathList);
+                        /// Handles and Value Types
+
+                        handles = sumHandles.CreateHandles();
+                        //String[] tryCreate_instancePath = new string[] { };
+                        //AdsErrorCode[] returnCode;
+                        //AdsErrorCode returnCode2;
+                        //returnCode2 = sumHandles.TryCreateHandles(out tryCreate_instancePath, out handles, out returnCode);
+
+                        Type[] valueTypes = symbolsInfo.TypesArray;
+                        /// Read Command
+                        SumHandleRead readCommand = new SumHandleRead(AdsConn.Instance.Client, handles, valueTypes);
+                        /// Read Values
+                        Object[] readValues = readCommand.Read();
+
+                        /// Show read values in UI using delegate method
+                        /// Use Dispatcher to allow other Thread to manipulate Collection created in UI Thread
+                        App.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            SetReadSymbolsCollection(readValues, symbolsInfo, ReadSymbolsCollection);
+                        });
+                    }
+                    else
+                    {
+                        App.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            /// Clear Collection
+                            /// Using Dispatcher because the collection owner is another Thread
+                            ReadSymbolsCollection.Clear();
+                        });
+                    }
 
                     /// Set Poll Time
                     Thread.Sleep(500);
@@ -249,7 +263,7 @@ namespace TcADSNet_Demo.ViewModels
             SymbolsCollection symbolsPoll = VariablesTreeViewModel.StaticSymbolsPoll;
             SymbolsInfo symbolsInfo = new SymbolsInfo();
             ObservableCollection<MySymbol> collection;
-            if (symbolsPoll != null)
+            if (symbolsPoll != null && symbolsPoll.Collection.Count > 0)
             {
                 collection = symbolsPoll.Collection;
                 symbolsInfo.InstancePathArray = new string[collection.Count];
@@ -259,62 +273,81 @@ namespace TcADSNet_Demo.ViewModels
                     symbolsInfo.InstancePathArray[i] = collection[i].Path;
                     /// Set TypesArray
                     /// Not contemplating Array type
-                    if (collection[i].Type.IndexOf("string", StringComparison.OrdinalIgnoreCase) >= 0)
-                    {
-                        /// Is String Type
-                        symbolsInfo.TypesArray[i] = typeof(String);
-                    }
-                    else
-                    {
-                        switch (collection[i].Type)
-                        {
-                            case "BOOL":
-                                symbolsInfo.TypesArray[i] = typeof(bool);
-                                break;
-                            case "BYTE":
-                                symbolsInfo.TypesArray[i] = typeof(byte);
-                                break;
-                            case "WORD":
-                                symbolsInfo.TypesArray[i] = typeof(ushort);
-                                break;
-                            case "DWORD":
-                                symbolsInfo.TypesArray[i] = typeof(uint);
-                                break;
-                            case "SINT":
-                                symbolsInfo.TypesArray[i] = typeof(sbyte);
-                                break;
-                            case "INT":
-                                symbolsInfo.TypesArray[i] = typeof(short);
-                                break;
-                            case "DINT":
-                                symbolsInfo.TypesArray[i] = typeof(int);
-                                break;
-                            case "LINT":
-                                symbolsInfo.TypesArray[i] = typeof(long);
-                                break;
-                            case "UINT":
-                                symbolsInfo.TypesArray[i] = typeof(ushort);
-                                break;
-                            case "UDINT":
-                                symbolsInfo.TypesArray[i] = typeof(uint);
-                                break;
-                            case "ULINT":
-                                symbolsInfo.TypesArray[i] = typeof(ulong);
-                                break;
-                            case "REAL":
-                                symbolsInfo.TypesArray[i] = typeof(float);
-                                break;
-                            case "LREAL":
-                                symbolsInfo.TypesArray[i] = typeof(double);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                    symbolsInfo.TypesArray[i] = ConvertTwinCATDataTypeToCSharpType(collection[i].Type);
                 }
             }
 
             return symbolsInfo;
+        }
+
+        private Type ConvertTwinCATDataTypeToCSharpType(string sType)
+        {
+            bool typeDetected = false;
+            Type retType = null;
+            /// String Check
+            if (sType.IndexOf("string", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                /// Is String Type
+                retType = typeof(String);
+                typeDetected = true;
+            }
+            /// Array Check
+            if (sType.IndexOf("array", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                /// Need implementation --> get size and type of array
+                retType = typeof(int[]);
+                typeDetected = true;
+            }
+            /// Others
+            if (!typeDetected)
+            {
+                switch (sType)
+                {
+                    case "BOOL":
+                        retType = typeof(bool);
+                        break;
+                    case "BYTE":
+                        retType = typeof(byte);
+                        break;
+                    case "WORD":
+                        retType = typeof(ushort);
+                        break;
+                    case "DWORD":
+                        retType = typeof(uint);
+                        break;
+                    case "SINT":
+                        retType = typeof(sbyte);
+                        break;
+                    case "INT":
+                        retType = typeof(short);
+                        break;
+                    case "DINT":
+                        retType = typeof(int);
+                        break;
+                    case "LINT":
+                        retType = typeof(long);
+                        break;
+                    case "UINT":
+                        retType = typeof(ushort);
+                        break;
+                    case "UDINT":
+                        retType = typeof(uint);
+                        break;
+                    case "ULINT":
+                        retType = typeof(ulong);
+                        break;
+                    case "REAL":
+                        retType = typeof(float);
+                        break;
+                    case "LREAL":
+                        retType = typeof(double);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            return retType;
         }
 
         
