@@ -27,26 +27,32 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="10"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource ItemText}"
-                   Text="VARIABLE"/>
-        <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource ItemText}"
-                   Text="Type"/>
-        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="0">
-            <TextBlock  Style="{StaticResource ItemText}"
-                   Text="Value"/>
-            <Button x:Name="BtnDebug" Content="Debug" Click="BtnDebug_Click"/>
-        </StackPanel>
+        
         <!--DataGrid StackPanel-->
-        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="4" Orientation="Vertical">
+        <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="4"
+                Style="{StaticResource BorderDatagridBase}">
+            <StackPanel Orientation="Vertical">
             <!--Header Title-->
             <Grid Height="40">
                 <TextBlock Style="{StaticResource TextBlockHeader1}">Symbols Poll</TextBlock>
+                <Button x:Name="BtnDebug" Content="Debug" 
+                        HorizontalAlignment="Left"
+                        Width="60" Height="25"
+                        Margin="20 0 0 -10"
+                        Click="BtnDebug_Click"/>
+                <Button x:Name="BtnWriteToPLC"
+                        Content="Write"
+                        Width="60" Height="25"
+                        Margin="0 0 10 -10"
+                        HorizontalAlignment="Right"
+                        Cursor="Hand" 
+                        Click="BtnWriteToPLC_Click"/>
             </Grid>
             <!--Content-->
             <DataGrid x:Name="DataGridSymbolsPoolValues"
@@ -57,41 +63,52 @@
                       RowHeight="30"
                       Background="LightGray"     
                       Margin="1 5 1 5">
-                <DataGrid.Columns>
-                    <!--Name-->
-                    <DataGridTemplateColumn Header="Name">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Name}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <!--Path-->
-                    <DataGridTemplateColumn Header="Type">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Path}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <!--Type-->
-                    <DataGridTemplateColumn Header="Type">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Type}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <!--Value-->
-                    <DataGridTemplateColumn Header="Value">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Value}" Foreground="Gray"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+                    <DataGrid.Columns>
+                        <!--Name-->
+                        <DataGridTemplateColumn Header="Name">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Name}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--Path-->
+                        <DataGridTemplateColumn Header="Type">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Path}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--Type-->
+                        <DataGridTemplateColumn Header="Type">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Type}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--Value-->
+                        <DataGridTemplateColumn Header="Value">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Value}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <!--Write Values-->
+                        <DataGridTemplateColumn Header="Write Value">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Path=WriteValue,
+                                                    Mode=TwoWay,
+                                                    UpdateSourceTrigger=PropertyChanged}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
         </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

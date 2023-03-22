@@ -11,18 +11,25 @@ namespace TcADSNet_Demo.Model
 {
     public class SymbolsCollection
     {
+        private readonly Object collectionLock = new Object();
         public ObservableCollection<MySymbol> Collection { get; set; }
 
 
         #region Constructor
         public SymbolsCollection()
         {
-            Collection = new ObservableCollection<MySymbol>();
+            lock (collectionLock)
+            {
+                Collection = new ObservableCollection<MySymbol>();
+            }
         }
 
         public SymbolsCollection(ObservableCollection<MySymbol> mySymbols)
         {
-            Collection = mySymbols;
+            lock (collectionLock)
+            {
+                Collection = mySymbols;
+            }
         }
 
         public SymbolsCollection(ObservableCollection<Symbol> symbols)
@@ -34,16 +41,22 @@ namespace TcADSNet_Demo.Model
         #region Methods
         public void SetCollection(ObservableCollection<MySymbol> mySymbols)
         {
-            Collection = mySymbols;
+            lock (collectionLock)
+            {
+                Collection = mySymbols;
+            }
         }
 
         public void ConvertTwincatSymbolToMySymbol_Collection(ObservableCollection<Symbol> symbols)
         {
             ///symbols collection refers to only one symbol without subsymbols, although the symbol type has the property subsymbol and other self references properties.
-            Collection = new ObservableCollection<MySymbol>();
-            foreach (Symbol item in symbols)
+            lock (collectionLock)
             {
-                Collection.Add(new MySymbol(item));
+                Collection = new ObservableCollection<MySymbol>();
+                foreach (Symbol item in symbols)
+                {
+                    Collection.Add(new MySymbol(item));
+                }
             }
         }
         #endregion

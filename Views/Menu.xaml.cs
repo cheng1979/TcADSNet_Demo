@@ -84,6 +84,7 @@ namespace TcADSNet_Demo.Views
 
         private void BtnAdsConnect_Click(object sender, RoutedEventArgs e)
         {
+            if (AdsConn.Instance.Client.IsConnected) return;
             AdsConn adsConn = AdsConn.Instance;
             adsConn.NetId   = TxtBox_NetId.Text;
             adsConn.AdsPort = TxtBox_Port.Text;

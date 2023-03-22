@@ -196,8 +196,10 @@
             <StackPanel Orientation="Horizontal"
                         Margin="10,0,0,10">
                 <Button x:Name="BtnMenuItems" Content="Items" Style="{StaticResource TopMenuButton}"
+                        Cursor="Hand"
                         Click="BtnMenuItems_Click"/>
                 <Button x:Name="BtnMoveDemo" Content="Move Demo" Style="{StaticResource TopMenuButton}"
+                        Cursor="Hand"
                         Click="BtnMoveDemo_Click" />
                 <!--<TextBlock Text="AMS NetId" Style="{StaticResource TopMenuTextBlock}"/>-->
                 <Button x:Name="BtnTextNetId" Content="AMS NetId" Style="{StaticResource TopMenuButton}"/>
@@ -205,8 +207,10 @@
                 <Button x:Name="BtnTextAMSPort" Content="AMS Port" Style="{StaticResource TopMenuButton}"/>
                 <TextBox x:Name="TxtBox_Port" Width="250" Height="30"/>
                 <Button x:Name="BtnAdsConnect" Content="ADS Connect" Style="{StaticResource TopMenuButtonBorderConnect}" 
+                        Cursor="Hand"
                         Click="BtnAdsConnect_Click"/>
                 <Button x:Name="BtnAdsDesconnect" Content="Desconnect" Style="{StaticResource TopMenuButtonBorderDisconnect}" 
+                        Cursor="Hand"
                         Click="BtnAdsDesconnect_Click"/>
             </StackPanel>
         </Grid>

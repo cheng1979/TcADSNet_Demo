@@ -39,33 +39,41 @@ namespace TcADSNet_Demo.ViewModels
             set { SetProperty(ref _hvar, value); }
         }
 
+
         private ObservableCollection<MySymbol> _readSymbolsCollection;
         public ObservableCollection<MySymbol> ReadSymbolsCollection
         {
-            get 
+            get
             {
                 if (_readSymbolsCollection == null) _readSymbolsCollection = new ObservableCollection<MySymbol>();
                 return _readSymbolsCollection;
             }
-            set { SetProperty(ref _readSymbolsCollection, value); }
+            set { SetProperty(ref _readSymbolsCollection, value);}
         }
 
-
-
         #endregion
+
 
         public VariablesViewModel()
         {
             Variables.evAdsDebugClicked  += IO_evAdsDebugClicked;
+            Variables.evAdsWriteToPlc    += Variables_evAdsWriteToPlc;
             Menu.evStartClientRead       += Menu_evStartClientRead;
             AdsConn.evAdsIsDisconnecting += AdsConn_evAdsIsDisconnecting;
+
 
             ///Fire Start Client Read if has client connection on Load VariablesViewModel
             if (AdsConn.Instance.Client.IsConnected) Menu_evStartClientRead(this, EventArgs.Empty);
         }
 
+        
+
 
         #region Events Listener
+        private void Variables_evAdsWriteToPlc(object sender, EventArgs e)
+        {
+            WriteBlockValuesToPlc();
+        }
 
         private void AdsConn_evAdsIsDisconnecting(object sender, EventArgs e)
         {
@@ -78,9 +86,11 @@ namespace TcADSNet_Demo.ViewModels
 
         private void IO_evAdsDebugClicked(object sender, EventArgs e)
         {
-            ReadValueOnce();
+            //ReadValueOnce();
 
             //Console.WriteLine("Connection Association Count = " + AdsConn.Instance.ConnectionAssociation.Count);
+
+            //Console.WriteLine(ReadSymbolsCollection);
         }
 
         private void Menu_evStartClientRead(object sender, EventArgs e)
@@ -92,7 +102,7 @@ namespace TcADSNet_Demo.ViewModels
             //readThr.Start();
             #endregion
 
-            /// *****NEED DELEGATE*****
+            /// *****NEED DISPATCHER*****
             /// 
             Thread readBlockThr = new Thread(ContinuousReadBlockAny);
             Thread.Sleep(1000);
@@ -273,104 +283,137 @@ namespace TcADSNet_Demo.ViewModels
                     symbolsInfo.InstancePathArray[i] = collection[i].Path;
                     /// Set TypesArray
                     /// Not contemplating Array type
-                    symbolsInfo.TypesArray[i] = ConvertTwinCATDataTypeToCSharpType(collection[i].Type);
+                    symbolsInfo.TypesArray[i] = ConvertDataType.ConvertTwinCATDataTypeToCSharpType(collection[i].Type);
                 }
             }
 
             return symbolsInfo;
         }
 
-        private Type ConvertTwinCATDataTypeToCSharpType(string sType)
+        public static void SetReadSymbolsCollection(Object[] objectsRead, SymbolsInfo sbInfo, ObservableCollection<MySymbol> sbCol)
         {
-            bool typeDetected = false;
-            Type retType = null;
-            /// String Check
-            if (sType.IndexOf("string", StringComparison.OrdinalIgnoreCase) >= 0)
+            if(objectsRead.Length != sbCol.Count)
             {
-                /// Is String Type
-                retType = typeof(String);
-                typeDetected = true;
-            }
-            /// Array Check
-            if (sType.IndexOf("array", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                /// Need implementation --> get size and type of array
-                retType = typeof(int[]);
-                typeDetected = true;
-            }
-            /// Others
-            if (!typeDetected)
-            {
-                switch (sType)
+                /// With Clear()
+                sbCol.Clear(); ///Clear collection
+                for (int i = 0; i < objectsRead.Length; i++)
                 {
-                    case "BOOL":
-                        retType = typeof(bool);
-                        break;
-                    case "BYTE":
-                        retType = typeof(byte);
-                        break;
-                    case "WORD":
-                        retType = typeof(ushort);
-                        break;
-                    case "DWORD":
-                        retType = typeof(uint);
-                        break;
-                    case "SINT":
-                        retType = typeof(sbyte);
-                        break;
-                    case "INT":
-                        retType = typeof(short);
-                        break;
-                    case "DINT":
-                        retType = typeof(int);
-                        break;
-                    case "LINT":
-                        retType = typeof(long);
-                        break;
-                    case "UINT":
-                        retType = typeof(ushort);
-                        break;
-                    case "UDINT":
-                        retType = typeof(uint); 
-                        break;
-                    case "ULINT":
-                        retType = typeof(ulong);
-                        break;
-                    case "REAL":
-                        retType = typeof(float);
-                        break;
-                    case "LREAL":
-                        retType = typeof(double);
-                        break;
-                    case "TIME":
-                        retType = typeof(TimeSpan);
-                        break;
-                    default:
-                        break;
-
+                    MySymbol mySymbol = new MySymbol();
+                    mySymbol.Name = sbInfo.InstancePathArray[i].Substring(sbInfo.InstancePathArray[i].IndexOf('.') + 1);
+                    mySymbol.Path = sbInfo.InstancePathArray[i];
+                    mySymbol.Type = sbInfo.TypesArray[i].Name;
+                    mySymbol.Value = objectsRead[i];
+                    sbCol.Add(mySymbol);
                 }
             }
+            else
+            {
+                /// Without Clear()
+                for (int i = 0; i < objectsRead.Length; i++)
+                {
+                    sbCol[i].Name = sbInfo.InstancePathArray[i].Substring(sbInfo.InstancePathArray[i].IndexOf('.') + 1);
+                    sbCol[i].Path = sbInfo.InstancePathArray[i];
+                    sbCol[i].Type = sbInfo.TypesArray[i].Name;
+                    sbCol[i].Value = objectsRead[i];
+                }
+            }
+        }
+
+        private void WriteBlockValuesToPlc()
+        {
+            List<String> instancePathList = new List<string>();
+            List<Object> writeValuesList = new List<object>();
+            List<Type> writeTypesList = new List<Type>();
+
+            /// Prepare write values to write
+            /// Write to PLC only if prepare values to write returns True
+            if (PrepareWriteValuesAndTypes(ref instancePathList, ref writeValuesList, ref writeTypesList))
+            {
+                /// Convert List to Array
+                String[] instancePathArray = instancePathList.ToArray();
+                Object[] writeValuesArray = writeValuesList.ToArray();
+                Type[] writeTypesArray = writeTypesList.ToArray();
+                /// Create Handle Command
+                SumCreateHandles handleCommand = new SumCreateHandles(AdsConn.Instance.Client, instancePathList);
+                uint[] handles = handleCommand.CreateHandles();
+                /// Create Read Command
+                SumHandleWrite writeCommand = new SumHandleWrite(AdsConn.Instance.Client, handles, writeTypesArray);
+                /// Write to PLC
+                writeCommand.Write(writeValuesArray);
+                /// Release handles after write
+                SumReleaseHandles releaseHandlesCmd = new SumReleaseHandles(AdsConn.Instance.Client, handles);
+                releaseHandlesCmd.ReleaseHandles();
+                /// Clear user writed values
+                ClearUserWritedValues_ReadSymbolsCollection();
+            }
+            else
+            {
+                /// Can't prepare value to write. Send message to user
+                MessageBox.Show("Can't WRITE to PLC. Verify write values format and types!", "WRITE TO PLC ERROR",
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
             
-            return retType;
+        }
+
+        private bool PrepareWriteValuesAndTypes(ref List<String> instancePathList, ref List<Object> writeValuesList, ref List<Type> writeTypesList)
+        {
+            /// Assuming instancePathArray, writeValuesArray and writeTypesArray are all empty
+            /// 
+            bool convertedOk = true;
+            for (int i = 0; i < ReadSymbolsCollection.Count; i++)
+            {
+                /// Check who have data to write
+                MySymbol symbol = ReadSymbolsCollection[i];
+                Boolean hasValueToWrite = false;
+                /// Check if have value to write
+                if (!symbol.Type.Equals("string", StringComparison.OrdinalIgnoreCase))
+                {
+                    /// Not Type String
+                    if (symbol.WriteValue != null && !symbol.WriteValue.Equals(""))
+                    {
+                        /// Has value to write
+                        hasValueToWrite = true;
+                    }
+                }
+                else
+                {
+                    /// Type String
+                    if(symbol.WriteValue != null)
+                    {
+                        hasValueToWrite = true;
+                    }
+                }
+                /// Has value to write
+                if (hasValueToWrite)
+                {
+                    Object valueToWrite = new object();
+                    Type tp = null;
+                    bool retConvert = ConvertDataType.ConvertTypeNameAndValueToTwinCATDataType(symbol.Type, symbol.WriteValue,ref tp, ref valueToWrite);
+                    if (!retConvert) convertedOk = false; /// convertedOk will set to FALSE if have one convertion false
+                    if(tp != null && valueToWrite != null && convertedOk)
+                    {
+                        instancePathList.Add(symbol.Path);
+                        writeValuesList.Add(valueToWrite);
+                        writeTypesList.Add(tp);
+                    }
+                }
+            }
+
+            return convertedOk;
+        }
+
+        private void ClearUserWritedValues_ReadSymbolsCollection()
+        {
+            foreach (MySymbol item in ReadSymbolsCollection)
+            {
+                if (item.WriteValue != null) item.WriteValue = null;
+            }
         }
 
         
-        public static void SetReadSymbolsCollection(Object[] objectsRead, SymbolsInfo sbInfo, ObservableCollection<MySymbol> sbCol)
-        {
-            sbCol.Clear(); ///Clear collection
-            for (int i = 0; i < objectsRead.Length; i++)
-            {
-                MySymbol mySymbol = new MySymbol();
-                mySymbol.Name   = sbInfo.InstancePathArray[i].Substring(sbInfo.InstancePathArray[i].IndexOf('.')+1);
-                mySymbol.Path   = sbInfo.InstancePathArray[i];
-                mySymbol.Type   = sbInfo.TypesArray[i].Name;
-                mySymbol.Value  = objectsRead[i];
-                sbCol.Add(mySymbol);
-                //Console.WriteLine("Symbol Name: {0}, Path: {1}, Type: {2}, Value: {3}",
-                //                  mySymbol.Name, mySymbol.Path, mySymbol.Type, mySymbol.Value.ToString());
-            }
-            
-        }
+
+        
+        
 
     }/// Class
 }

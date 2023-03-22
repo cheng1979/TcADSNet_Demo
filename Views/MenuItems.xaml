@@ -52,7 +52,9 @@
         <!--Body Content - Cell (0,1)-->
         <Grid Grid.Column="0" Grid.Row="1">
             <Button x:Name="BtnItemIODevices" Content="IO Devices"
-                        Style="{StaticResource ItemButton}" Click="BtnItemIODevices_Click"/>
+                    Style="{StaticResource ItemButton}" 
+                    Cursor="Hand"
+                    Click="BtnItemIODevices_Click"/>
         </Grid>
         <!--Body Content - Cell (0,2)-->
         <Grid Grid.Column="0" Grid.Row="2">

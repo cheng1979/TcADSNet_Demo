@@ -39,9 +39,13 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button x:Name="BtnViewVariablesTree" Style="{StaticResource ButtonRegions}"
-                    Content="Variables Tree" Click="BtnViewVariablesTree_Click"/>
+                    Content="Variables Tree" 
+                    Cursor="Hand"
+                    Click="BtnViewVariablesTree_Click"/>
             <Button x:Name="BtnViewVariables" Style="{StaticResource ButtonRegions}"
-                    Content="Variables" Click="BtnViewVariables_Click"/>
+                    Content="Variables" 
+                    Cursor="Hand"
+                    Click="BtnViewVariables_Click"/>
         </StackPanel>
         <ContentControl Grid.Row="1"
             prism:RegionManager.RegionName="IoDevicesContent"/>

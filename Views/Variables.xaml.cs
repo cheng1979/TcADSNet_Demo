@@ -22,6 +22,7 @@ namespace TcADSNet_Demo.Views
     public partial class Variables : UserControl
     {
         public static EventHandler evAdsDebugClicked;
+        public static EventHandler evAdsWriteToPlc;
 
         public Variables()
         {
@@ -32,5 +33,11 @@ namespace TcADSNet_Demo.Views
         {
             evAdsDebugClicked?.Invoke(this, EventArgs.Empty);
         }
-    }
+
+        private void BtnWriteToPLC_Click(object sender, RoutedEventArgs e)
+        {
+            evAdsWriteToPlc?.Invoke(this, EventArgs.Empty);
+        }
+
+    }///Class
 }
