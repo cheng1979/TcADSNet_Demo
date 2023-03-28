@@ -12,6 +12,7 @@ using TcADSNet_Demo.Views;
 using TwinCAT.Ads;
 using TwinCAT.Ads.SumCommand;
 using TwinCAT.TypeSystem;
+using TwinCAT.Ads.TypeSystem;
 //using TwinCAT.Ads;
 
 namespace TcADSNet_Demo.ViewModels
@@ -64,6 +65,10 @@ namespace TcADSNet_Demo.ViewModels
 
             ///Fire Start Client Read if has client connection on Load VariablesViewModel
             if (AdsConn.Instance.Client.IsConnected) Menu_evStartClientRead(this, EventArgs.Empty);
+
+            /// To Create Instance of an object
+            //Symbol sb = (Symbol)Activator.CreateInstance(typeof(Symbol));
+            
         }
 
         
@@ -91,6 +96,8 @@ namespace TcADSNet_Demo.ViewModels
             //Console.WriteLine("Connection Association Count = " + AdsConn.Instance.ConnectionAssociation.Count);
 
             //Console.WriteLine(ReadSymbolsCollection);
+
+            Publisher.Publish("Test Status Message Via Publisher.");
         }
 
         private void Menu_evStartClientRead(object sender, EventArgs e)
@@ -106,7 +113,8 @@ namespace TcADSNet_Demo.ViewModels
             /// 
             Thread readBlockThr = new Thread(ContinuousReadBlockAny);
             Thread.Sleep(1000);
-            Console.WriteLine("Start Read Block Client Variables Thread");
+            //Console.WriteLine("Start Read Block Client Variables Thread");
+            Publisher.Publish("Start Block Read Client Variables Thread");
             readBlockThr.Start();
         }
         #endregion

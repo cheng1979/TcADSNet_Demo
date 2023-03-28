@@ -233,7 +233,9 @@ namespace TcADSNet_Demo.Model
                             break;
                         case "TimeSpan":
                             type = typeof(TimeSpan);
-                            /// Need to implement
+                            Int64 numTicks = Convert.ToInt64(value) * 10000; /// 1ms = 10000 ticks
+                            TimeSpan ts = new TimeSpan(numTicks);
+                            cvVal = ts;
                             convertedOk = true;
                             break;
                         default:

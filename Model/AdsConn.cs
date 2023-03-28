@@ -117,12 +117,14 @@ namespace TcADSNet_Demo.Model
                 }
                 else
                 {
-                    MessageBox.Show("Incorrect Port. Type an integer value.");
+                    //MessageBox.Show("Incorrect Port. Type an integer value.");
+                    Publisher.Publish("Incorrect Port. Type an integer value.");
                 }
             }
             catch (AdsErrorException ex)
             {
                 MessageBox.Show("AdsConnection Exception Error :\n " + ex.Message);
+                Publisher.Publish("AdsConnection Exception Error :\n " + ex.Message);
                 Client.Dispose();
             }
         }

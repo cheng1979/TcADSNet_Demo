@@ -145,6 +145,7 @@
     <Compile Include="Model\DataTypePropertyConverter.cs" />
     <Compile Include="Model\JsonSerializeReturn.cs" />
     <Compile Include="Model\MySymbol.cs" />
+    <Compile Include="Model\Publisher.cs" />
     <Compile Include="Model\ReturnObject.cs" />
     <Compile Include="Model\SymbolsCollection.cs" />
     <Compile Include="Model\SymbolsInfo.cs" />

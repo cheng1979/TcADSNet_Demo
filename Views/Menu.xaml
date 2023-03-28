@@ -4,13 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TcADSNet_Demo.Views"
+        xmlns:vm="clr-namespace:TcADSNet_Demo.ViewModels"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="Menu"
-        Height="715" Width="1200">
+        Height="728" Width="1200">
     <Window.Resources>
+        <vm:MenuViewModel x:Key="MenuViewModel"/>
+        
         <!--TopMenu Button-->
         <Style x:Key="TopMenuButton" TargetType="Button">
             <Setter Property="Height" Value="50"/>
@@ -188,7 +191,8 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="3"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <!--Top menu bar-->
         <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7"
@@ -218,6 +222,15 @@
         <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="5"
               Background="#152429">
             <ContentControl prism:RegionManager.RegionName="BodyContent"/>
+        </Grid>
+        <!--Footer Content-->
+        <Grid Grid.Column="0" Grid.Row="4"
+              Grid.ColumnSpan="7"
+              Background="Gray"
+              >
+            <TextBlock x:Name="TxtBlock_StatusMessage"
+                       FontSize="12" Margin="10 0 10 0" VerticalAlignment="Center"
+                       Text="{Binding Source={StaticResource MenuViewModel}, Path=StatusMessage}"/>
         </Grid>
     </Grid>
 </Window>
