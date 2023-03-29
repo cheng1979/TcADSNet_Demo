@@ -60,6 +60,7 @@ namespace TcADSNet_Demo.Views
             /// Pre fill TextBox Values
             TxtBox_NetId.Text = "5.59.242.176.1.1";
             TxtBox_Port.Text  = "851";
+            Publisher.Publish("Ready");
         }
 
         private void Menu_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -97,6 +98,28 @@ namespace TcADSNet_Demo.Views
         {
             if (AdsConn.Instance.IsConnected) AdsConn.Instance.Disconnect();
 
+        }
+
+        private void BtnCloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnMinimizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void GridFirstRow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            /// Drag move window
+            this.DragMove();
+        }
+
+        private void StackPanelWindowsControlButtons_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            /// Drag move window
+            this.DragMove();
         }
     }
 }

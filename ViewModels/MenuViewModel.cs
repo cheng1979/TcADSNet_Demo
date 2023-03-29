@@ -26,6 +26,13 @@ namespace TcADSNet_Demo.ViewModels
             set { SetProperty(ref _statusMessage, value); }
         }
 
+        private bool _btnDisconnectIsEnabled;
+        public bool BtnDisconnectIsEnabled
+        {
+            get { return _btnDisconnectIsEnabled; }
+            set { SetProperty(ref _btnDisconnectIsEnabled, value); }
+        }
+
 
 
         public MenuViewModel()
@@ -35,13 +42,23 @@ namespace TcADSNet_Demo.ViewModels
             AdsConn.evAdsConnected += AdsConn_evAdsConnected;
             AdsConn.evAdsDisconnected += AdsConn_evAdsDisconnected;
             Publisher.evPublisher += Publisher_evPublisher;
+            Publisher.evOnConnectSubTasksCompleted += Publisher_evOnConnectSubTasksCompleted;
 
             ButtonConnectColor = "Transparent";
-
+            StatusMessage = "Loading App...";
+            BtnDisconnectIsEnabled = false;
 
         }
-
+        
+        
         #region Event Listeners
+        private void Publisher_evOnConnectSubTasksCompleted(object sender, bool e)
+        {
+            /// All On Connected SubTasks are completed --> enable Disconnect button
+            BtnDisconnectIsEnabled = true;
+        }
+        
+        
         private void Publisher_evPublisher(object sender, string msg)
         {
             if (msg != null)
@@ -82,6 +99,9 @@ namespace TcADSNet_Demo.ViewModels
         private void AdsConn_evAdsConnected(object sender, EventArgs e)
         {
             ButtonConnectColor = "#11f705"; ///Light Green
+
+            /// Publish that on connected subtask is completed
+            Publisher.OnConnectSubTaskDone();
         }
 
         #endregion

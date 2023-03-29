@@ -7,7 +7,7 @@
              xmlns:model="clr-namespace:TcADSNet_Demo.Model"
              xmlns:twincat="clr-namespace:TwinCAT.Ads.TypeSystem;assembly=TwinCAT.Ads"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="1160">
@@ -114,7 +114,7 @@
                             <DataGridTemplateColumn Header="Delete">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <iconPacks:PackIconMaterial x:Name="IconDeleteSymbol"
+                                        <icon:PackIconMaterial x:Name="IconDeleteSymbol"
                                                                     Kind="Delete"
                                                                     Width="15" Height="15"
                                                                     Style="{StaticResource IconDelete}" MouseLeftButtonUp="IconDeleteSymbol_MouseLeftButtonUp"/>

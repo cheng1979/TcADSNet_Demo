@@ -47,7 +47,11 @@ namespace TcADSNet_Demo.ViewModels
         private SymbolsCollection _symbolsPoll;
         public SymbolsCollection SymbolsPoll
         {
-            get { return _symbolsPoll; }
+            get
+            {
+                if (_symbolsPoll == null) _symbolsPoll = new SymbolsCollection();
+                return _symbolsPoll;
+            }
             set
             {
                 SetProperty(ref _symbolsPoll, value);
@@ -68,7 +72,7 @@ namespace TcADSNet_Demo.ViewModels
 
             SelectedSymbols = new ObservableCollection<Symbol>();
             GetPlcSymbols();
-            UpdadeSymbolsPollFromFile_OnLoad();
+            //UpdadeSymbolsPollFromFile_OnLoad();
             UpdateSelectedSymbolsFromFile_OnLoad();
         }
 
@@ -97,11 +101,13 @@ namespace TcADSNet_Demo.ViewModels
                 {
                     /// Update Symbols Poll if save file successfully
                     SymbolsPoll = symbolsCollection_beforeSave;
-                    MessageBox.Show("Symbols Selection Saved", "SAVE SYMBOLS SELECTION");
+                    //MessageBox.Show("Symbols Selection Saved", "SAVE SYMBOLS SELECTION");
+                    Publisher.Publish("Symbols Selection Saved");
                 }
                 else
                 {
                     MessageBox.Show("Error on Saving Symbol Selection!", "SAVE ERROR");
+                    Publisher.Publish("Error on Saving Symbol Selection!");
                 }
             }
             catch (Exception ex)
@@ -127,7 +133,11 @@ namespace TcADSNet_Demo.ViewModels
         {
             ///Update _membersCollection when ADS Connection Acquired
             GetPlcSymbols();
+            UpdadeSymbolsPollFromFile();
             UpdateSelectedSymbolsFromFile();
+
+            /// Publish that on connected subtask is completed
+            Publisher.OnConnectSubTaskDone();
         }
         #endregion///Event Listeners
 
@@ -275,6 +285,11 @@ namespace TcADSNet_Demo.ViewModels
             //long finalTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             //Console.WriteLine("\nUpdate Selected Symbols Elapsed Time\n" + (finalTime - initialTime)+" ms\n");
             #endregion
+        }
+
+        private void UpdadeSymbolsPollFromFile()
+        {
+            SymbolsPoll = ConfigFile.ReadFile_SymbolsPool();
         }
 
         private void UpdateSelectedSymbolsFromFile()

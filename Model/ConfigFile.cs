@@ -25,17 +25,19 @@ namespace TcADSNet_Demo.Model
             Boolean isSaved = false;
             try
             {
+                String dynamicFilePath = AdsConn.Instance.NetId + "_" + ConfigFile.fileName_symbolsPollConfig; /// Concatenate AMS NetID with file name to generate unique path name
+                ConfigFile.filePath_symbolsPollConfig = Path.Combine(Environment.CurrentDirectory, @"Config\", dynamicFilePath);
                 String filePath = ConfigFile.filePath_symbolsPollConfig;
                 JsonSerializeReturn json = new JsonSerializeReturn();
+                json = ConvertSymbolsToJson(mySymbols);
                 if (File.Exists(filePath))
                 {
-                    json = ConvertSymbolsToJson(mySymbols);
                     File.WriteAllText(filePath, json.Serialized);
                 }
                 else
                 {
                     StreamWriter sw = File.CreateText(filePath);
-                    sw.Write(ConvertSymbolsToJson(mySymbols));
+                    sw.Write(json.Serialized);
                     sw.Close();
                 }
 
@@ -52,6 +54,8 @@ namespace TcADSNet_Demo.Model
 
         public static SymbolsCollection ReadFile_SymbolsPool()
         {
+            String dynamicFilePath = AdsConn.Instance.NetId + "_" + ConfigFile.fileName_symbolsPollConfig; /// Concatenate AMS NetID with file name to get especific file path for the ADS Client
+            ConfigFile.filePath_symbolsPollConfig = Path.Combine(Environment.CurrentDirectory, @"Config\", dynamicFilePath);
             String filePath = ConfigFile.filePath_symbolsPollConfig;
             SymbolsCollection syms = new SymbolsCollection();
 

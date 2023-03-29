@@ -116,6 +116,9 @@ namespace TcADSNet_Demo.ViewModels
             //Console.WriteLine("Start Read Block Client Variables Thread");
             Publisher.Publish("Start Block Read Client Variables Thread");
             readBlockThr.Start();
+
+            /// Publish On Connected SubTask Completed
+            Publisher.OnConnectSubTaskDone();
         }
         #endregion
 

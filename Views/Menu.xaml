@@ -7,154 +7,193 @@
         xmlns:vm="clr-namespace:TcADSNet_Demo.ViewModels"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True" Background="Transparent"
         Title="Menu"
         Height="728" Width="1200">
     <Window.Resources>
-        <vm:MenuViewModel x:Key="MenuViewModel"/>
-        
-        <!--TopMenu Button-->
-        <Style x:Key="TopMenuButton" TargetType="Button">
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="MinWidth" Value="80"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border CornerRadius="10"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
-                                BorderThickness="0,1,1,0">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              TextElement.FontWeight="Normal"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--TopMenu Button Border-->
-        <Style x:Key="TopMenuButtonBorder" TargetType="Button">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="MinWidth" Value="110"/>
-            <Setter Property="Margin" Value="20"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border CornerRadius="10"
-                                Background="Transparent"
-                                BorderBrush="AliceBlue"
-                                BorderThickness="1,1,1,1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              TextElement.FontWeight="Normal"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--TopMenu Button Border Connect-->
-        <Style x:Key="TopMenuButtonBorderConnect" TargetType="Button">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="MinWidth" Value="110"/>
-            <Setter Property="Margin" Value="20"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="mainBorder"
-                                CornerRadius="10"
-                                Background="{Binding ButtonConnectColor}"
-                                BorderBrush="AliceBlue"
-                                BorderThickness="1,1,1,1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              TextElement.FontWeight="Normal"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="mainBorder" Property="RenderTransform">
-                                    <Setter.Value>
-                                        <TransformGroup>
-                                            <TranslateTransform X="1" Y="1"/>
-                                            <ScaleTransform ScaleX="0.97" ScaleY="0.97"/>
-                                        </TransformGroup>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="mainBorder" Property="Background" Value="#4a7894"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--TopMenu Button Border Disconnect-->
-        <Style x:Key="TopMenuButtonBorderDisconnect" TargetType="Button">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="MinWidth" Value="110"/>
-            <Setter Property="Margin" Value="20"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="mainBorder"
-                                CornerRadius="10"
-                                Background="Transparent"
-                                BorderBrush="AliceBlue"
-                                BorderThickness="1,1,1,1">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              TextElement.FontWeight="Normal"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="mainBorder" Property="RenderTransform">
-                                    <Setter.Value>
-                                        <TransformGroup>
-                                            <TranslateTransform X="1" Y="1"/>
-                                            <ScaleTransform ScaleX="0.97" ScaleY="0.97"/>
-                                        </TransformGroup>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter TargetName="mainBorder" Property="Background" Value="red"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--TopMenu TextBlock-->
-        <Style x:Key="TopMenuTextBlock" TargetType="TextBlock">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <!--Option Button-->
-        <Style x:Key="OptionButton" TargetType="Button">
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="Width" Value="80"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border CornerRadius="10"
-                                Background="LightGray"
-                                BorderBrush="#888"
-                                BorderThickness="0,1,1,0">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              TextElement.FontWeight="Normal"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--Item Button-->
-        <Style x:Key="ItemButton" TargetType="Button">
+        <ResourceDictionary>
+            <!--Global Style-->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/GlobalThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!--ViewModels-->
+            <vm:MenuViewModel x:Key="MenuViewModel"/>
+            <!--TopMenu Button-->
+            <Style x:Key="TopMenuButton" TargetType="Button">
+                <Setter Property="Height" Value="50"/>
+                <Setter Property="MinWidth" Value="80"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="ButtonBorder"
+                                    CornerRadius="10"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0,1,1,0">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  TextElement.FontWeight="Normal"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="TopMenuButton_2" TargetType="Button">
+                <Setter Property="Height" Value="50"/>
+                <Setter Property="MinWidth" Value="80"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="ButtonBorder"
+                                    CornerRadius="10"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0,1,1,0">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  TextElement.FontWeight="Normal"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Background" TargetName="ButtonBorder" Value="#26FFFFFF"/>
+                                    <Setter Property="BorderBrush" TargetName="ButtonBorder" Value="#26FFFFFF"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--TopMenu Button Border-->
+            <Style x:Key="TopMenuButtonBorder" TargetType="Button">
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="MinWidth" Value="110"/>
+                <Setter Property="Margin" Value="20"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border CornerRadius="10"
+                                    Background="Transparent"
+                                    BorderBrush="AliceBlue"
+                                    BorderThickness="1,1,1,1">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  TextElement.FontWeight="Normal"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--TopMenu Button Border Connect-->
+            <Style x:Key="TopMenuButtonBorderConnect" TargetType="Button">
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="MinWidth" Value="110"/>
+                <Setter Property="Margin" Value="20"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="mainBorder"
+                                    CornerRadius="10"
+                                    Background="{Binding ButtonConnectColor}"
+                                    BorderBrush="AliceBlue"
+                                    BorderThickness="1,1,1,1">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  TextElement.FontWeight="Normal"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="mainBorder" Property="RenderTransform">
+                                        <Setter.Value>
+                                            <TransformGroup>
+                                                <TranslateTransform X="1" Y="1"/>
+                                                <ScaleTransform ScaleX="0.97" ScaleY="0.97"/>
+                                            </TransformGroup>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="mainBorder" Property="Background" Value="#4a7894"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--TopMenu Button Border Disconnect-->
+            <Style x:Key="TopMenuButtonBorderDisconnect" TargetType="Button">
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="MinWidth" Value="110"/>
+                <Setter Property="Margin" Value="20"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="mainBorder"
+                                    CornerRadius="10"
+                                    Background="Transparent"
+                                    BorderBrush="AliceBlue"
+                                    BorderThickness="1,1,1,1">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  TextElement.FontWeight="Normal"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="mainBorder" Property="RenderTransform">
+                                        <Setter.Value>
+                                            <TransformGroup>
+                                                <TranslateTransform X="1" Y="1"/>
+                                                <ScaleTransform ScaleX="0.97" ScaleY="0.97"/>
+                                            </TransformGroup>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="mainBorder" Property="Background" Value="red"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--TopMenu TextBlock-->
+            <Style x:Key="TopMenuTextBlock" TargetType="TextBlock">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <!--Option Button-->
+            <Style x:Key="OptionButton" TargetType="Button">
+                <Setter Property="Height" Value="50"/>
+                <Setter Property="Width" Value="80"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border CornerRadius="10"
+                                    Background="LightGray"
+                                    BorderBrush="#888"
+                                    BorderThickness="0,1,1,0">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  TextElement.FontWeight="Normal"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--Item Button-->
+            <Style x:Key="ItemButton" TargetType="Button">
             <Setter Property="Height" Value="130"/>
             <Setter Property="Width" Value="130"/>
             <Setter Property="Margin" Value="10"/>
@@ -176,61 +215,76 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        </ResourceDictionary>
     </Window.Resources>
-    <Grid Background="#3e657d">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="10"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="3"/>
-            <RowDefinition Height="20"/>
-        </Grid.RowDefinitions>
-        <!--Top menu bar-->
-        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7"
-              Background="#3e657d">
-            <StackPanel Orientation="Horizontal"
-                        Margin="10,0,0,10">
-                <Button x:Name="BtnMenuItems" Content="Items" Style="{StaticResource TopMenuButton}"
-                        Cursor="Hand"
-                        Click="BtnMenuItems_Click"/>
-                <Button x:Name="BtnMoveDemo" Content="Move Demo" Style="{StaticResource TopMenuButton}"
-                        Cursor="Hand"
-                        Click="BtnMoveDemo_Click" />
-                <!--<TextBlock Text="AMS NetId" Style="{StaticResource TopMenuTextBlock}"/>-->
-                <Button x:Name="BtnTextNetId" Content="AMS NetId" Style="{StaticResource TopMenuButton}"/>
-                <TextBox x:Name="TxtBox_NetId" Width="250" Height="30"/>
-                <Button x:Name="BtnTextAMSPort" Content="AMS Port" Style="{StaticResource TopMenuButton}"/>
-                <TextBox x:Name="TxtBox_Port" Width="250" Height="30"/>
-                <Button x:Name="BtnAdsConnect" Content="ADS Connect" Style="{StaticResource TopMenuButtonBorderConnect}" 
-                        Cursor="Hand"
-                        Click="BtnAdsConnect_Click"/>
-                <Button x:Name="BtnAdsDesconnect" Content="Desconnect" Style="{StaticResource TopMenuButtonBorderDisconnect}" 
-                        Cursor="Hand"
-                        Click="BtnAdsDesconnect_Click"/>
-            </StackPanel>
+    <Border Style="{StaticResource BorderMainWindow}">
+        <Grid Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="3"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="GridFirstRow" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="7" Background="Transparent"
+                  MouseLeftButtonDown="GridFirstRow_MouseLeftButtonDown"/>
+            <!--Top menu bar-->
+            <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7"
+                  Background="#3e657d">
+                <StackPanel Orientation="Horizontal"
+                            Margin="10,0,0,10">
+                    <Button x:Name="BtnMenuItems" Content="Items" Style="{StaticResource TopMenuButton_2}"
+                            Click="BtnMenuItems_Click"/>
+                    <Button x:Name="BtnMoveDemo" Content="Move Demo" Style="{StaticResource TopMenuButton_2}"
+                            Click="BtnMoveDemo_Click" />
+                    <!--<TextBlock Text="AMS NetId" Style="{StaticResource TopMenuTextBlock}"/>-->
+                    <Button x:Name="BtnTextNetId" Content="AMS NetId" Style="{StaticResource TopMenuButton}"/>
+                    <TextBox x:Name="TxtBox_NetId" Width="250" Height="30"/>
+                    <Button x:Name="BtnTextAMSPort" Content="AMS Port" Style="{StaticResource TopMenuButton}"/>
+                    <TextBox x:Name="TxtBox_Port" Width="250" Height="30"/>
+                    <Button x:Name="BtnAdsConnect" Content="ADS Connect" Style="{StaticResource TopMenuButtonBorderConnect}" 
+                            Cursor="Hand"
+                            Click="BtnAdsConnect_Click"/>
+                    <Button x:Name="BtnAdsDesconnect" Content="Desconnect" Style="{StaticResource TopMenuButtonBorderDisconnect}" 
+                            IsEnabled="{Binding BtnDisconnectIsEnabled}"
+                            Cursor="Hand"
+                            Click="BtnAdsDesconnect_Click"/>
+                </StackPanel>
+                <StackPanel x:Name="StackPanelWindowsControlButtons"
+                            Orientation="Horizontal" HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Top" Background="Transparent" MouseLeftButtonDown="StackPanelWindowsControlButtons_MouseLeftButtonDown">
+                    <Button x:Name="BtnCloseApp" Style="{StaticResource ButtonCloseWindow}"
+                            Margin="10 0 4 0" 
+                            Click="BtnCloseApp_Click"/>
+                    <Button x:Name="BtnMinimizeApp" Style="{StaticResource ButtonMinimizeWindow}"
+                            Margin="4 0 4 0" 
+                            Click="BtnMinimizeApp_Click"/>
+                </StackPanel>
+                
+            </Grid>
+            <!--Body Content-->
+            <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="5"
+                  Background="#152429">
+                <ContentControl prism:RegionManager.RegionName="BodyContent"/>
+            </Grid>
+            <!--Footer Content-->
+            <Border Grid.Column="0" Grid.Row="4"
+                  Grid.ColumnSpan="7"
+                  Background="#72808080"
+                  CornerRadius="0 0 10 10">
+                <TextBlock x:Name="TxtBlock_StatusMessage"
+                           FontSize="12" Margin="10 0 10 0" VerticalAlignment="Center"
+                           Text="{Binding Source={StaticResource MenuViewModel}, Path=StatusMessage}"/>
+            </Border>
         </Grid>
-        <!--Body Content-->
-        <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="5"
-              Background="#152429">
-            <ContentControl prism:RegionManager.RegionName="BodyContent"/>
-        </Grid>
-        <!--Footer Content-->
-        <Grid Grid.Column="0" Grid.Row="4"
-              Grid.ColumnSpan="7"
-              Background="Gray"
-              >
-            <TextBlock x:Name="TxtBlock_StatusMessage"
-                       FontSize="12" Margin="10 0 10 0" VerticalAlignment="Center"
-                       Text="{Binding Source={StaticResource MenuViewModel}, Path=StatusMessage}"/>
-        </Grid>
-    </Grid>
+    </Border>
 </Window>
