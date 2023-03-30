@@ -248,16 +248,28 @@
                             Click="BtnMoveDemo_Click" />
                     <!--<TextBlock Text="AMS NetId" Style="{StaticResource TopMenuTextBlock}"/>-->
                     <Button x:Name="BtnTextNetId" Content="AMS NetId" Style="{StaticResource TopMenuButton}"/>
-                    <TextBox x:Name="TxtBox_NetId" Width="250" Height="30"/>
+                    <TextBox x:Name="TxtBox_NetId" Width="250" Height="30" Visibility="Collapsed"/>
+                    <ComboBox x:Name="cbBox_NetId" Width="250" Height="30" IsEditable="True" 
+                              IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"
+                              TextSearch.TextPath="NetId"
+                              ItemsSource="{Binding AmsRoutes}"
+                              SelectedValuePath="{Binding NetId}"
+                              DropDownClosed="cbBox_NetId_DropDownClosed">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding NetId}" FontSize="15"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <Button x:Name="BtnTextAMSPort" Content="AMS Port" Style="{StaticResource TopMenuButton}"/>
                     <TextBox x:Name="TxtBox_Port" Width="250" Height="30"/>
                     <Button x:Name="BtnAdsConnect" Content="ADS Connect" Style="{StaticResource TopMenuButtonBorderConnect}" 
-                            Cursor="Hand"
+                            Cursor="Hand" IsEnabled="{Binding BtnConnectIsEnabled}"
                             Click="BtnAdsConnect_Click"/>
                     <Button x:Name="BtnAdsDesconnect" Content="Desconnect" Style="{StaticResource TopMenuButtonBorderDisconnect}" 
                             IsEnabled="{Binding BtnDisconnectIsEnabled}"
                             Cursor="Hand"
-                            Click="BtnAdsDesconnect_Click"/>
+                            Click="BtnAdsDisconnect_Click"/>
                 </StackPanel>
                 <StackPanel x:Name="StackPanelWindowsControlButtons"
                             Orientation="Horizontal" HorizontalAlignment="Stretch" 

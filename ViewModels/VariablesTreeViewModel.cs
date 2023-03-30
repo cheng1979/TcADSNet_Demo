@@ -74,6 +74,8 @@ namespace TcADSNet_Demo.ViewModels
             GetPlcSymbols();
             //UpdadeSymbolsPollFromFile_OnLoad();
             UpdateSelectedSymbolsFromFile_OnLoad();
+            /// Enable Connect Button after Loaded VariablesTree
+            Publisher.EnableConnectButton();
         }
 
 

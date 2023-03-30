@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,7 +42,8 @@ namespace TcADSNet_Demo.Views
             //MyRegions.MainRegion.Activate(view);
         }
 
-        
+
+        #region Events
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
             MyRegions.MainRegion = _regionManager.Regions[RegionsName.BodyContent];
@@ -61,13 +63,20 @@ namespace TcADSNet_Demo.Views
             TxtBox_NetId.Text = "5.59.242.176.1.1";
             TxtBox_Port.Text  = "851";
             Publisher.Publish("Ready");
+            
         }
-
+                
         private void Menu_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             /// implement ADS connection dispose before closing the wpf form.
-        }
 
+            /// If has connection activate Disconnect
+            if (AdsConn.Instance.Client.IsConnected)
+            {
+                BtnAdsDisconnect_Click(null, null);
+                Thread.Sleep(3000);
+            }
+        }
 
         private void BtnMenuItems_Click(object sender, RoutedEventArgs e)
         {
@@ -85,16 +94,17 @@ namespace TcADSNet_Demo.Views
 
         private void BtnAdsConnect_Click(object sender, RoutedEventArgs e)
         {
-            if (AdsConn.Instance.Client.IsConnected) return;
+            if (AdsConn.Instance.Client.IsConnected || cbBox_NetId.Text == null || cbBox_NetId.Text.Equals("")) return;
             AdsConn adsConn = AdsConn.Instance;
-            adsConn.NetId   = TxtBox_NetId.Text;
+            //adsConn.NetId   = TxtBox_NetId.Text;
+            adsConn.NetId   = cbBox_NetId.Text;
             adsConn.AdsPort = TxtBox_Port.Text;
             adsConn.Connect();
             /// Rise event to read client variables
             evStartClientRead?.Invoke(this, EventArgs.Empty);
         }
 
-        private void BtnAdsDesconnect_Click(object sender, RoutedEventArgs e)
+        private void BtnAdsDisconnect_Click(object sender, RoutedEventArgs e)
         {
             if (AdsConn.Instance.IsConnected) AdsConn.Instance.Disconnect();
 
@@ -121,5 +131,19 @@ namespace TcADSNet_Demo.Views
             /// Drag move window
             this.DragMove();
         }
-    }
+        #endregion
+
+        #region Methods
+        private void cbBox_NetId_DropDownClosed(object sender, EventArgs e)
+        {
+            if (cbBox_NetId.SelectedItem != null)
+            {
+                AmsNetId item = (AmsNetId)cbBox_NetId.SelectedItem;
+                cbBox_NetId.Text = item.NetId;
+            }
+        }
+
+        #endregion
+
+    }/// Class
 }

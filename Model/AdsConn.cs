@@ -135,18 +135,44 @@ namespace TcADSNet_Demo.Model
             {
                 ///Rise event IsDisconnecting to tell tasks to stop using Client's Connection
                 evAdsIsDisconnecting?.Invoke(this, EventArgs.Empty);
-                ///wait tasks to free connection usage
-                while(ConnectionAssociation.Count > 0)
-                {
-                    Thread.Sleep(10);
-                }
+                #region Moved to AsyncDisconnect()
+                /////wait tasks to free connection usage
+                //while(ConnectionAssociation.Count > 0)
+                //{
+                //    Thread.Sleep(100);
+                //    Console.WriteLine("Waiting Connection Associated Tasks to Stop... Count={0}", ConnectionAssociation.Count);
+                //    Publisher.Publish("Waiting Connection Associated Tasks to Stop...");
+                //}
+                //Console.WriteLine("Disconnecting...");
+                //Publisher.Publish("Disconnecting...");
+                //Client.Disconnect();
+                //IsConnected = false;
+                /////Rise event
+                //evAdsDisconnected?.Invoke(this, EventArgs.Empty);
+                #endregion
+
+                Thread DisconnectThread = new Thread(AsyncDisconnect);
+                DisconnectThread.Start();
+            }
+        }
+
+        public void AsyncDisconnect()
+        {
+            ///wait tasks to free connection usage
+            while (ConnectionAssociation.Count > 0)
+            {
+                Thread.Sleep(10);
+                Publisher.Publish("Waiting Connection Associated Tasks to Stop...");
+            }
+            Publisher.Publish("Disconnecting...");
+            App.Current.Dispatcher.Invoke((Action)delegate
+            { 
                 Client.Disconnect();
                 IsConnected = false;
-                ///Rise event
+                ///Rise main thread event
                 evAdsDisconnected?.Invoke(this, EventArgs.Empty);
-                
-                //MessageBox.Show("Client Disconnected. Rise Event.");
-            }
+            });
+            
         }
 
         public ISymbolLoader GetSymbol()

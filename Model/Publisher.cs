@@ -13,6 +13,7 @@ namespace TcADSNet_Demo.Model
 
         public static event EventHandler<String> evPublisher;
         public static event EventHandler<Boolean> evOnConnectSubTasksCompleted;
+        public static event EventHandler evEnableConnectButton;
 
         public static void Publish(String msg)
         {
@@ -22,11 +23,18 @@ namespace TcADSNet_Demo.Model
         public static void OnConnectSubTaskDone()
         {
             OnConnectSubTasksCount++;
+            //Console.WriteLine("Sub Tasks Count " + OnConnectSubTasksCount);
             if(OnConnectSubTasksCount >= OnConnectTotalSubTasks)
             {
                 evOnConnectSubTasksCompleted?.Invoke(null, true);
                 OnConnectSubTasksCount = 0;
+                //Console.WriteLine("Sub Tasks Count " + OnConnectSubTasksCount);
             }
+        }
+
+        public static void EnableConnectButton()
+        {
+            evEnableConnectButton?.Invoke(null, EventArgs.Empty);
         }
 
     }///Class

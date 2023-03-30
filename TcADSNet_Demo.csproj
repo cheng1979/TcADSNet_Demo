@@ -140,6 +140,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\AdsConn.cs" />
+    <Compile Include="Model\AmsNetId.cs" />
     <Compile Include="Model\ConfigFile.cs" />
     <Compile Include="Model\ConvertDataType.cs" />
     <Compile Include="Model\DataTypePropertyConverter.cs" />

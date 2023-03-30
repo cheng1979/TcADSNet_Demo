@@ -16,8 +16,10 @@ namespace TcADSNet_Demo.Model
     {
         private static string fileName_symbolsPollConfig = "configSymbolsPoll.txt";
         private static string fileName_symbolsPollConfig_BKP = "configSymbolsPollBKP.txt";
+        private static string fileName_routesConfig = "configRoutes.txt";
         private static string filePath_symbolsPollConfig = Path.Combine(Environment.CurrentDirectory, @"Config\", ConfigFile.fileName_symbolsPollConfig);
         private static string filePath_symbolsPollConfig_BKP = Path.Combine(Environment.CurrentDirectory, @"Config\", ConfigFile.fileName_symbolsPollConfig_BKP);
+        private static string filePath_routesConfig = Path.Combine(Environment.CurrentDirectory, @"Config\", ConfigFile.fileName_routesConfig);
 
         public static Boolean SaveFile_SymbolsPool(SymbolsCollection mySymbols)
         {
@@ -67,7 +69,53 @@ namespace TcADSNet_Demo.Model
             return syms;
         }
 
-        
+        public static Boolean SaveFile_AmsRoutes(ObservableCollection<AmsNetId> routes)
+        {
+
+            Boolean isSaved = false;
+            try
+            {
+                ConfigFile.filePath_routesConfig = Path.Combine(Environment.CurrentDirectory, @"Config\", ConfigFile.fileName_routesConfig);
+                String filePath = ConfigFile.filePath_routesConfig;
+                JsonSerializeReturn json = new JsonSerializeReturn();
+                json = ConvertAmsRoutesToJson(routes);
+                if (File.Exists(filePath))
+                {
+                    File.WriteAllText(filePath, json.Serialized);
+                }
+                else
+                {
+                    StreamWriter sw = File.CreateText(filePath);
+                    sw.Write(json.Serialized);
+                    sw.Close();
+                }
+
+                if (json.Converted) isSaved = true;
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show(e.Message, "Save Routes Config. ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return isSaved;
+        }
+
+        public static ObservableCollection<AmsNetId> ReadFile_RoutesConfig()
+        {
+            ConfigFile.filePath_routesConfig = Path.Combine(Environment.CurrentDirectory, @"Config\", ConfigFile.fileName_routesConfig);
+            String filePath = ConfigFile.filePath_routesConfig;
+            ObservableCollection<AmsNetId> routes = new ObservableCollection<AmsNetId>();
+
+            if (File.Exists(filePath))
+            {
+                routes = ConvertJsonToAmsRoutes(File.ReadAllText(filePath));
+            }
+
+            return routes;
+        }
+
+
         private static JsonSerializeReturn ConvertSymbolsToJson(SymbolsCollection mySymbols)
         {
             JsonSerializeReturn ret = new JsonSerializeReturn();
@@ -79,13 +127,13 @@ namespace TcADSNet_Demo.Model
             }
             catch (Exception e)
             {
-                Console.WriteLine("\nJSON Serialization Exeption\n" + e.Message);
+                //Console.WriteLine("\nJSON Serialization Exeption\n" + e.Message);
+                Publisher.Publish("JSON Serialization Exeption: " + e.Message);
                 ret.Converted = false;
             }
 
             return ret;
         }
-
 
         private static ObservableCollection<MySymbol> ConvertJsonToSymbols(String jsonObj)
         {
@@ -93,6 +141,34 @@ namespace TcADSNet_Demo.Model
             
             collection = JsonConvert.DeserializeObject<ObservableCollection<MySymbol>>(jsonObj);
                         
+            return collection;
+        }
+
+        private static JsonSerializeReturn ConvertAmsRoutesToJson(ObservableCollection<AmsNetId> routes)
+        {
+            JsonSerializeReturn ret = new JsonSerializeReturn();
+            try
+            {
+                ret.Serialized = JsonConvert.SerializeObject(routes);
+
+                ret.Converted = true;
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine("\nJSON Serialization Exeption\n" + e.Message);
+                Publisher.Publish("JSON Serialization Exeption: " + e.Message);
+                ret.Converted = false;
+            }
+
+            return ret;
+        }
+
+        private static ObservableCollection<AmsNetId> ConvertJsonToAmsRoutes(String jsonObj)
+        {
+            ObservableCollection<AmsNetId> collection;
+
+            collection = JsonConvert.DeserializeObject<ObservableCollection<AmsNetId>>(jsonObj);
+
             return collection;
         }
 
